@@ -10,7 +10,7 @@ import SwiftUI
 struct ProductCard: View {
     
     var category: String = "Category"
-    var productName: String = "Product name with two or more lines goes here"
+    var productName: String = "Product name with two or Pore lines goes here"
     var productPrice: Double = 0.0
     var isHorizontal: Bool = false
     
@@ -71,14 +71,18 @@ struct ProductCard: View {
                     
                 }
                 
-                VStack(alignment: .leading ,spacing: 4) {
+                VStack(alignment: .leading) {
                     Text("\(productName)")
                         .typography(.subheadlineRegular)
                         .lineLimit(2)
-                    
+                        .frame(height: 36, alignment: .top)
+                        .padding(.bottom, 4)
+                                      
                     let formattedPrice = String(format: "%.2f", productPrice)
                     Text("US$ \(formattedPrice)")
                         .typography(.headline)
+                    
+                    
                 }
             }
             .padding(8)
@@ -86,7 +90,8 @@ struct ProductCard: View {
                 RoundedRectangle(cornerRadius: 16)
                     .foregroundStyle(Color(.backgroundsSecondary))
             )
-            .frame(maxWidth: 177)
+            .frame(width: 177)
+          
         }
     }
 }
