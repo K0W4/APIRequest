@@ -6,17 +6,24 @@
 //
 
 import Foundation
+import SwiftUI
 
-class Purchase {
+class Purchase: ObservableObject, Identifiable, Hashable {
     let id: UUID
     let product: Product
-    let quantity: Int
-    var purchase: [Product: Int] = [:]
+    var quantity: Int
     
     init(product: Product) {
         self.id = UUID()
         self.product = product
         self.quantity = 1
-        self.purchase[product] = quantity
+    }
+    
+    static func == (lhs: Purchase, rhs: Purchase) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

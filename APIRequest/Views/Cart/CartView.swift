@@ -9,11 +9,7 @@ import SwiftUI
 
 struct CartView: View {
     var isEmpty: Bool = false
-    var total: Double {
-        cart.reduce(0) { result, purchase in
-            result + (purchase.product.price * Double(purchase.quantity))
-        }
-    }
+    var total: Double = 0
     
     @State var cart: [Purchase] = [
         Purchase(product: Product(
@@ -66,7 +62,7 @@ struct CartView: View {
                                     type: .cart,
                                     productName: purchase.product.title,
                                     productPrice: purchase.product.price,
-                                    count: purchase.quantity
+                                    quantity: $purchase.quantity
                                 )
                             }
                         }

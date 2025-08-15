@@ -11,7 +11,8 @@ struct ProductList: View {
     var type: TypeProductList
     var productName: String = "Product name with two or more lines goes here"
     var productPrice: Double = 0.0
-    @State var count: Int = 0
+    @Binding var quantity: Int
+    
     var date: Date = Date()
     var formattedDate: String {
         let formatter = DateFormatter()
@@ -34,6 +35,7 @@ struct ProductList: View {
                         Text(productName)
                             .typography(.footnoteRegular)
                             .lineLimit(2)
+                            .frame(height: 36, alignment: .top)
                                                 
                         let formattedPrice = String(format: "%.2f", productPrice)
                         Text("US$ \(formattedPrice)")
@@ -43,7 +45,7 @@ struct ProductList: View {
                     Spacer()
                     
                     HStack(spacing: 4) {
-                        Button(action: { if count  > 0 { count -= 1 } }) {
+                        Button(action: { if quantity  > 0 { quantity -= 1 } }) {
                             Image(systemName: "minus")
                                 .frame(width: 23, height: 23)
                                 .typography(.caption1Regular)
@@ -54,12 +56,12 @@ struct ProductList: View {
                                 )
                         }
                         
-                        Text("\(count)")
+                        Text("\(quantity)")
                             .frame(width: 16)
                             .typography(.bodyRegular)
                             .foregroundColor(.labelsPrimary)
                         
-                        Button(action: { if count  < 9 { count += 1 } }) {
+                        Button(action: { if quantity  < 9 { quantity += 1 } }) {
                             Image(systemName: "plus")
                                 .frame(width: 23, height: 23)
                                 .typography(.caption1Regular)
@@ -145,7 +147,7 @@ struct ProductList: View {
                 }
                 .padding(8)
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(8)
             .background(
                 RoundedRectangle(cornerRadius: 16)
@@ -160,6 +162,6 @@ enum TypeProductList {
 }
 
 #Preview {
-    var c: Int = 0
-    ProductList(type: .delivery, count: c)
+    var count: Int = 1
+    ProductList(type: .cart, quantity: .constant(count))
 }
