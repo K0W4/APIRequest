@@ -40,6 +40,8 @@ struct ProductList: View {
                             .typography(.headline)
                     }
                     
+                    Spacer()
+                    
                     HStack(spacing: 4) {
                         Button(action: { if count  > 0 { count -= 1 } }) {
                             Image(systemName: "minus")
@@ -71,6 +73,7 @@ struct ProductList: View {
                 }
                 .padding(8)
             }
+            .frame(maxWidth: .infinity)
             .padding(8)
             .background(
                 RoundedRectangle(cornerRadius: 16)
@@ -95,6 +98,8 @@ struct ProductList: View {
                             .typography(.headline)
                     }
                     
+                    Spacer()
+                    
                     Button {
                         
                     } label: {
@@ -110,6 +115,7 @@ struct ProductList: View {
                 }
                 .padding(8)
             }
+            .frame(maxWidth: .infinity)
             .padding(8)
             .background(
                 RoundedRectangle(cornerRadius: 16)
@@ -139,6 +145,7 @@ struct ProductList: View {
                 }
                 .padding(8)
             }
+            .frame(maxWidth: .infinity)
             .padding(8)
             .background(
                 RoundedRectangle(cornerRadius: 16)
