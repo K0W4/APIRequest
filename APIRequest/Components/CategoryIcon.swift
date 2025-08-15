@@ -24,10 +24,11 @@ struct CategoryIcon: View {
             Text(category.rawValue)
                 .typography(.subheadlineRegular)
                 .foregroundColor(.labelsPrimary)
-                .lineLimit(2)
                 .multilineTextAlignment(.center)
+                .lineLimit(2)                // até 2 linhas
+                .fixedSize(horizontal: false, vertical: true) // força expandir pra baixo
         }
-        .frame(width: 84)
+        .frame(width: 84) // fixa largura, altura ajusta automaticamente
     }
 }
 

@@ -14,8 +14,8 @@ struct CategoriesView: View {
     var body: some View {
         VStack() {
             
-            HStack(spacing: 8){
-                CategoryIcon(category: .beauty)
+            HStack(alignment: .top, spacing: 8){
+                CategoryIcon(category: .kitchenAccessories)
                 CategoryIcon(category: .beauty)
                 CategoryIcon(category: .beauty)
                 CategoryIcon(category: .beauty)
@@ -26,9 +26,9 @@ struct CategoriesView: View {
                 List(ProductCategory.allCases, id: \.self) { category in
                     NavigationLink(value: category) {
                         Text(category.rawValue)
-                            .padding(.top, 8)
+                        
                     }
-                    //.frame(height: 60,alignment: .leading)
+                    .frame(height: 60,alignment: .leading)
         
                     
                 }
