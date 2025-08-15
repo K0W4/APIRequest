@@ -12,8 +12,32 @@ struct CategoriesView: View {
     @State private var isRecording: Bool = false
     
     var body: some View {
-        VStack {
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack() {
+            
+            HStack(spacing: 8){
+                CategoryIcon(category: .beauty)
+                CategoryIcon(category: .beauty)
+                CategoryIcon(category: .beauty)
+                CategoryIcon(category: .beauty)
+            }
+            .padding()
+            
+            VStack() {
+                List(ProductCategory.allCases, id: \.self) { category in
+                    NavigationLink(value: category) {
+                        Text(category.rawValue)
+                            .padding(.top, 8)
+                    }
+                    //.frame(height: 60,alignment: .leading)
+        
+                    
+                }
+                .listStyle(.plain)
+//                        .navigationDestination(for: ProductCategory.self) { category in
+//                            CategoryDetailView(category: category)   // tela de destino
+//                        }
+            }
+            
         }
         .navigationTitle(Text("Categories"))
         .background(.backgroundsPrimary)
@@ -26,5 +50,7 @@ struct CategoriesView: View {
 }
 
 #Preview {
-    TabBar()
+    NavigationStack {
+        CategoriesView()
+    }
 }

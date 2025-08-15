@@ -7,10 +7,18 @@
 
 import Foundation
 
-struct Product: Decodable, Identifiable {
+class Product: Decodable, Identifiable {
     let id: Int
     let title: String
     let description: String
     let category: ProductCategory
     let price: Double
+    
+    init(id: Int, title: String, description: String, category: ProductCategory, price: Double) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.category = category
+        self.price = price
+    }
 }
