@@ -18,7 +18,8 @@ struct FavoriteIcon: View {
             .padding(8)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .foregroundStyle(.fillsTertiary)
+                    //.foregroundStyle(.fillsTertiary)
+                    .foregroundStyle(.graysGray5)
             )
             .onTapGesture {
                 isFavorite.toggle()
