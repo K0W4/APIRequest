@@ -10,31 +10,39 @@
 import Testing
 
 struct APIRequestTests {
-    @Test func fetchProducts() async throws {
+    @Test
+    func fetchProducts() async throws {
         // Given
-        let service = MockProductService(souldFail: false)
+        let service = MockProductService(shouldFail: false)
         let viewModel = ProductViewModel(service: service)
         
         // When
-        await viewModel.loadProducts()
+        await viewModel.fetchProduct(id: 1)
+        await viewModel.fetchProductsByCategory(category: "category")
+        await viewModel.fetchTopPicks()
         
         // Then
-        #expect(!viewModel.products.isEmpty)
         #expect(viewModel.product != nil)
+        #expect(!viewModel.productsByCategories.isEmpty)
+        #expect(!viewModel.topPicks.isEmpty)
         #expect(viewModel.errorMessage == nil)
     }
     
-    @Test func fetchProductsShouldFail() async throws {
+    @Test
+    func fetchProductsShouldFail() async throws {
         // Given
-        let service = MockProductService(souldFail: true)
+        let service = MockProductService(shouldFail: true)
         let viewModel = ProductViewModel(service: service)
         
         // When
-        await viewModel.loadProducts()
+        await viewModel.fetchProduct(id: 1)
+        await viewModel.fetchProductsByCategory(category: "category")
+        await viewModel.fetchTopPicks()
         
         // Then
-        #expect(viewModel.products.isEmpty)
         #expect(viewModel.product == nil)
+        #expect(viewModel.productsByCategories.isEmpty)
+        #expect(viewModel.topPicks.isEmpty)
         #expect(viewModel.errorMessage != nil)
     }
 }

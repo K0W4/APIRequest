@@ -48,7 +48,7 @@ class ProductService: ProductServiceProtocol {
         return productResponse.results
     }
     
-    func fechProductByCategory(category: String) async throws -> [Product] {
+    func fechProductsByCategory(category: String) async throws -> [Product] {
         let urlString = "\(baseURL)/products/category/\(category)"
         
         guard let url = URL(string: urlString) else {
