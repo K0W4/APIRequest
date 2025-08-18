@@ -16,8 +16,9 @@ struct Details: View {
         id: 5,
         title: "Dell XPS 13 Laptop",
         description: "Notebook premium com tela InfinityEdge, processador Intel Core i7 e 16GB de RAM.",
-        category: .laptop,
-        price: 1299.00
+        category: "Laptops",
+        price: 1299.00,
+        thumbnail: ""
     )
     
     var body: some View {

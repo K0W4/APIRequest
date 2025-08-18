@@ -7,26 +7,38 @@
 
 import Foundation
 
-class Product: Decodable, Identifiable, Hashable {
-    let id: Int
-    let title: String
-    let description: String
-    let category: ProductCategory
-    let price: Double
+class ProductResponse: Decodable {
+    var results: [Product]
+}
+
+class ProductCategoryResponse: Decodable {
+    var results: [Product]
+}
+
+class Product: Decodable {
+    var id: Int
+    var title: String
+    var description: String
+    var category: String
+    var price: Double
+    var thumbnail: String
+    var isFavorite: Bool = false
     
-    init(id: Int, title: String, description: String, category: ProductCategory, price: Double) {
+    enum CodingKeys: CodingKey {
+        case id
+        case title
+        case description
+        case category
+        case price
+        case thumbnail
+    }
+    
+    init(id: Int, title: String, description: String, category: String, price: Double, thumbnail: String) {
         self.id = id
         self.title = title
         self.description = description
         self.category = category
         self.price = price
-    }
-    
-    static func == (lhs: Product, rhs: Product) -> Bool {
-        lhs.id == rhs.id
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+        self.thumbnail = thumbnail
     }
 }

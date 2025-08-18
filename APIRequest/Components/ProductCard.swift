@@ -8,13 +8,9 @@
 import SwiftUI
 
 struct ProductCard: View {
+    @Binding var product: Product
     
-    var category: String = "Category"
-    var productName: String = "Product name with two or Pore lines goes here"
-    var productPrice: Double = 0.0
-    var isHorizontal: Bool = false
-    
-    @State var isFavorite: Bool = false
+    var isHorizontal: Bool
     
     var body: some View {
         
@@ -29,21 +25,21 @@ struct ProductCard: View {
                 VStack(alignment: .leading, spacing: 24) {
                     
                     HStack(spacing: 4) {
-                        Text("\(category)".uppercased())
+                        Text("\(product.category)".uppercased())
                             .typography(.footnoteRegular)
                             .foregroundStyle(Color(.labelsSecondary))
                         
                         Spacer()
    
-                        FavoriteIcon(isFavorite: $isFavorite)
+                        FavoriteIcon(isFavorite: $product.isFavorite)
                     }
                     
                     VStack (alignment: .leading, spacing: 4) {
-                        Text("\(productName)")
+                        Text("\(product.title)")
                             .typography(.subheadlineRegular)
                             .lineLimit(2)
                                                 
-                        let formattedPrice = String(format: "%.2f", productPrice)
+                        let formattedPrice = String(format: "%.2f", product.price)
                         Text("US$ \(formattedPrice)")
                             .typography(.headline)
                     }
@@ -67,18 +63,18 @@ struct ProductCard: View {
                         .frame(width: 160, height: 160)
                         .cornerRadius(8)
                     
-                    FavoriteIcon(isFavorite: $isFavorite)
+                    FavoriteIcon(isFavorite: $product.isFavorite)
                     
                 }
                 
                 VStack(alignment: .leading) {
-                    Text("\(productName)")
+                    Text("\(product.title)")
                         .typography(.subheadlineRegular)
                         .lineLimit(2)
                         .frame(height: 36, alignment: .top)
                         .padding(.bottom, 4)
                                       
-                    let formattedPrice = String(format: "%.2f", productPrice)
+                    let formattedPrice = String(format: "%.2f", product.price)
                     Text("US$ \(formattedPrice)")
                         .typography(.headline)
                     
@@ -97,5 +93,7 @@ struct ProductCard: View {
 }
 
 #Preview {
-    ProductCard()
+    var product: Product = Product(id: 1, title: "Product name with two or more lines goes here", description: "Descrição", category: "Category", price: 0.0, thumbnail: "Thumbnail")
+    
+    ProductCard(product: .constant(product), isHorizontal: false)
 }
