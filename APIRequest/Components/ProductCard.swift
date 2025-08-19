@@ -31,7 +31,7 @@ struct ProductCard: View {
                         
                         Spacer()
    
-                        FavoriteIcon(isFavorite: $product.isFavorite)
+                        FavoriteIcon(product: $product)
                     }
                     
                     VStack (alignment: .leading, spacing: 4) {
@@ -63,8 +63,7 @@ struct ProductCard: View {
                         .frame(width: 160, height: 160)
                         .cornerRadius(8)
                     
-                    FavoriteIcon(isFavorite: $product.isFavorite)
-                    
+                    FavoriteIcon(product: $product)
                 }
                 
                 VStack(alignment: .leading) {

@@ -1,5 +1,5 @@
 //
-//  ProductViewModel.swift
+//  HomeViewModel.swift
 //  APIRequest
 //
 //  Created by Gabriel Kowaleski on 18/08/25.
@@ -8,9 +8,8 @@
 import Foundation
 
 @Observable
-class ProductViewModel: ProductViewModelProtocol {
-    var product: Product?
-    var productsByCategories: [Product] = []
+class HomeViewModel {
+    var deals: Product?
     var topPicks: [Product] = []
     var isLoading: Bool = false
     var errorMessage: String?
@@ -25,19 +24,9 @@ class ProductViewModel: ProductViewModelProtocol {
         isLoading = true
         
         do {
-            product = try await service.fetchProduct(id: id)
+            deals = try await service.fetchProduct(id: id)
         } catch {
             errorMessage = "Error to fetch Product: \(error.localizedDescription)"
-        }
-    }
-    
-    func fetchProductsByCategory(category: String) async {
-        isLoading = true
-
-        do {
-            productsByCategories = try await service.fechProductsByCategory(category: category)
-        } catch {
-            errorMessage = "Error to fetch Product by Category: \(error.localizedDescription)"
         }
     }
     

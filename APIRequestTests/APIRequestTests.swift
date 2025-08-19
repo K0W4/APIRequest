@@ -14,7 +14,7 @@ struct APIRequestTests {
     func fetchProducts() async throws {
         // Given
         let service = MockProductService(shouldFail: false)
-        let viewModel = ProductViewModel(service: service)
+        let viewModel = HomeViewModel(service: service)
         
         // When
         await viewModel.fetchProduct(id: 1)
@@ -22,7 +22,7 @@ struct APIRequestTests {
         await viewModel.fetchTopPicks()
         
         // Then
-        #expect(viewModel.product != nil)
+        #expect(viewModel.deals != nil)
         #expect(!viewModel.productsByCategories.isEmpty)
         #expect(!viewModel.topPicks.isEmpty)
         #expect(viewModel.errorMessage == nil)
@@ -32,7 +32,7 @@ struct APIRequestTests {
     func fetchProductsShouldFail() async throws {
         // Given
         let service = MockProductService(shouldFail: true)
-        let viewModel = ProductViewModel(service: service)
+        let viewModel = HomeViewModel(service: service)
         
         // When
         await viewModel.fetchProduct(id: 1)
@@ -40,7 +40,7 @@ struct APIRequestTests {
         await viewModel.fetchTopPicks()
         
         // Then
-        #expect(viewModel.product == nil)
+        #expect(viewModel.deals == nil)
         #expect(viewModel.productsByCategories.isEmpty)
         #expect(viewModel.topPicks.isEmpty)
         #expect(viewModel.errorMessage != nil)

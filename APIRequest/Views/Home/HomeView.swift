@@ -8,29 +8,23 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State var dealsOfTheDay: Product?
-    
-    @State var topPicks: [Product] = []
+    var viewModel: HomeViewModel
     
     private let columns = [
-            GridItem(.flexible(), spacing: 0),
-            GridItem(.flexible(), spacing: 0)
-        ]
+        GridItem(.flexible(), spacing: 0),
+        GridItem(.flexible(), spacing: 0)
+    ]
     
     var body: some View {
-        
         ScrollView{
             VStack(spacing: 16) {
-                
-                
-                if let deal = dealsOfTheDay {
+                if let deals = viewModel.deals {
                     VStack(spacing: 8) {
                         Text("Deals of the day")
                             .typography(.title2Emphasized)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        ProductCard(product: .constant(deal), isHorizontal: true)
-                        
+                        ProductCard(product: deals, isHorizontal: true)
                     }
                 }
                 
@@ -41,15 +35,15 @@ struct HomeView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     LazyVGrid(columns: columns) {
-                        ForEach($topPicks, id: \.id) { product in
-                            ProductCard(product: product, isHorizontal: false)
+                        if let topPicks = viewModel.topPicks{
+                            ForEach(topPicks, id: \.id) { product in
+                                ProductCard(product: product, isHorizontal: false)
+                            }
                         }
                     }
-                    
                 }
 
                 Spacer()
-                
             }
             .padding()
             .navigationTitle(Text("Home"))

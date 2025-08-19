@@ -9,24 +9,26 @@ import SwiftUI
 
 struct FavoriteIcon: View {
     
-    @Binding var isFavorite: Bool
+    @Binding var product: Product
     
     var body: some View {
         
-        Image(systemName: isFavorite ? "heart.fill" : "heart")
+        Image(systemName: product.isFavorite ? "heart.fill" : "heart")
             .typography(.title3Regular)
             .padding(8)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    //.foregroundStyle(.fillsTertiary)
+                    .foregroundStyle(.fillsTertiary)
                     .foregroundStyle(.graysGray5)
             )
-            .onTapGesture {
-                isFavorite.toggle()
+            .onTapGesture {                
+                product.isFavorite.toggle()
             }
     }
 }
 
 #Preview {
-    FavoriteIcon(isFavorite: .constant(false))
+    var product: Product = Product(id: 1, title: "Product name with two or more lines goes here", description: "Descrição", category: "Category", price: 0.0, thumbnail: "Thumbnail")
+    
+    FavoriteIcon(product: .constant(product))
 }
