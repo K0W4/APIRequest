@@ -16,16 +16,16 @@ struct CategoryIcon: View {
                 .fill(Color(.backgroundsSecondary))
                 .frame(width: 84, height: 84)
                 .overlay(
-                    Image(systemName: category.imageName)
+                    Image(systemName: category.symbolName)
                         .font(.system(size: 38, weight: .regular))
                         .foregroundStyle(.fillsSecondary)
                 )
 
-            Text(category.rawValue)
+            Text(category.name)
                 .typography(.subheadlineRegular)
                 .foregroundColor(.labelsPrimary)
                 .multilineTextAlignment(.center)
-                .lineLimit(2)
+                .lineLimit(1)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(width: 84)
@@ -33,5 +33,6 @@ struct CategoryIcon: View {
 }
 
 #Preview {
-    CategoryIcon(category: .beauty)
+    let sampleCategory = ProductCategory(name: "Furniture") 
+    CategoryIcon(category: sampleCategory)
 }

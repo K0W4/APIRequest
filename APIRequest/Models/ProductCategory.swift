@@ -2,89 +2,81 @@
 //  ProductCategory.swift
 //  APIRequest
 //
-//  Created by Gabriel Barbosa on 13/08/25.
+//  Created by Gabriel Barbosa on 20/08/25.
 //
 
 import Foundation
 
-enum ProductCategory: String, Codable, Identifiable, CaseIterable {
-    var id: String { rawValue }
+class ProductCategory: Decodable, Identifiable {
+    var name: String
     
-    case beauty = "Beauty"
-    case fragrances = "Fragrances"
-    case furniture = "Furniture"
-    case groceries = "Groceries"
-    case homeDecoration = "Home-Decoration"
-    case kitchenAccessories = "Kitchen-Accessories"
-    case laptop = "Laptop"
-    case mensShirts = "Mens-Shirts"
-    case mensShoes = "Mens-Shoes"
-    case mensWatches = "Mens-Watches"
-    case mobileAccessories = "Mobile-Accessories"
-    case motorcycle = "Motorcycle"
-    case skinCare = "Skin-Care"
-    case smartphones = "Smartphones"
-    case sportsAccessories = "Sports-Accessories"
-    case sunglasses = "Sunglasses"
-    case tablets = "Tablets"
-    case tops = "Tops"
-    case vehicle = "Vehicle"
-    case womensBags = "Womens-Bags"
-    case womensDresses = "Womens-Dresses"
-    case womensJewellery = "Womens-Jewellery"
-    case womensShoes = "Womens-Shoes"
-    case womensWatches = "Womens-Watches"
+    var id: String { name }
     
-    var imageName: String {
-        switch self {
-        case .beauty:
-            return "sparkles"
-        case .fragrances:
-            return "drop.fill"
-        case .furniture:
-            return "chair.lounge.fill"
-        case .groceries:
-            return "basket.fill"
-        case .homeDecoration:
-            return "lamp.table.fill"
-        case .kitchenAccessories:
-            return "fork.knife"
-        case .laptop:
-            return "laptopcomputer"
-        case .mensShirts:
-            return "tshirt.fill"
-        case .mensShoes:
-            return "shoe.fill"
-        case .mensWatches:
-            return "applewatch.watchface"
-        case .mobileAccessories:
-            return "powercord.fill"
-        case .motorcycle:
-            return "motorcycle.fill"
-        case .skinCare:
-            return "face.smiling.inverse"
-        case .smartphones:
-            return "iphone.gen3"
-        case .sportsAccessories:
-            return "tennis.racket"
-        case .sunglasses:
-            return "sunglasses.fill"
-        case .tablets:
-            return "ipad"
-        case .tops:
-            return "jacket.fill"
-        case .vehicle:
-            return "car.fill"
-        case .womensBags:
-            return "handbag.fill"
-        case .womensDresses:
-            return "figure.stand.dress"
-        case .womensJewellery:
-            return "crown.fill"
-        case .womensShoes:
-            return "shoeprints.fill"
-        case .womensWatches:
-            return "watch.analog"
+    enum CodingKeys: CodingKey {
+        case name
+    }
+    
+    init(name: String) {
+        self.name = name
+    }
+    
+    var symbolName: String {
+        switch name {
+            case "Beauty":
+                return "sparkles"
+            case "Fragrances":
+                return "drop.fill"
+            case "Furniture":
+                return "chair.lounge.fill"
+            case "Groceries":
+                return "basket.fill"
+            case "Home Decoration":
+                return "lamp.table.fill"
+            case "Kitchen Accessories":
+                return "fork.knife"
+            case "Laptop":
+                return "laptopcomputer"
+            case "Mens Shirts":
+                return "tshirt.fill"
+            case "Mens Shoes":
+                return "shoe.fill"
+            case "Mens Watches":
+                return "applewatch.watchface"
+            case "Mobile Accessories":
+                return "powercord.fill"
+            case "Motorcycle":
+                return "motorcycle.fill"
+            case "Skin Care":
+                return "face.smiling.inverse"
+            case "Smartphones":
+                return "iphone.gen3"
+            case "Sports Accessories":
+                return "tennis.racket"
+            case "Sunglasses":
+                return "sunglasses.fill"
+            case "Tablets":
+                return "ipad"
+            case "Tops":
+                return "jacket.fill"
+            case "Vehicle":
+                return "car.fill"
+            case "Womens Bags":
+                return "handbag.fill"
+            case "Womens Dresses":
+                return "figure.stand.dress"
+            case "Womens Jewellery":
+                return "crown.fill"
+            case "Womens Shoes":
+                return "shoeprints.fill"
+            case "Womens Watches":
+                return "watch.analog"
+            default:
+                return "questionmark.circle" 
         }
     }
+    
+}
+
+class CategoriesResponse: Decodable {
+    var products: [Product]
 }
