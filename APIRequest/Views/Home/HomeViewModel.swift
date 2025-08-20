@@ -14,6 +14,7 @@ class HomeViewModel {
     var isLoading: Bool = false
     var errorMessage: String?
     var selectedProductId: Int? = nil
+    var favoriteIds: [Int] = []
     
     let favoriteService: FavoriteServiceProtocol
     let productService: ProductServiceProtocol
@@ -21,6 +22,7 @@ class HomeViewModel {
     init(favoriteService: FavoriteServiceProtocol, productService: ProductServiceProtocol) {
         self.favoriteService = favoriteService
         self.productService = productService
+        self.favoriteIds = favoriteService.favoriteIds
     }
     
     func fetchProducts(id: Int) async {
@@ -42,5 +44,6 @@ class HomeViewModel {
     
     func favoriteTogle(id: Int) {
         favoriteService.favoriteToggle(id: id)
+        self.favoriteIds = favoriteService.favoriteIds
     }
 }

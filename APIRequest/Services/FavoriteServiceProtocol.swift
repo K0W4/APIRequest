@@ -8,5 +8,7 @@
 import Foundation
 
 protocol FavoriteServiceProtocol {
+    var favoriteIds: [Int] { get }
+    
     func favoriteToggle(id: Int)
 }
