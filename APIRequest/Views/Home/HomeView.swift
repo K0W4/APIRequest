@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State var viewModel: HomeViewModel = HomeViewModel(productService: ProductService())
+    @State var viewModel: HomeViewModel = HomeViewModel(favoriteService: FavoriteService(), productService: ProductService())
     @State var showDetails: Bool = false
     
     private let columns = [
@@ -69,9 +69,6 @@ struct HomeView: View {
                 .navigationTitle(Text("Home"))
                 .background(.backgroundsPrimary)
                 .toolbarBackgroundVisibility(.visible, for: .tabBar)
-                .refreshable {
-                    await viewModel.fetchProducts(id: 1)
-                }
             }
             .task {
                 await viewModel.fetchProducts(id: 1)

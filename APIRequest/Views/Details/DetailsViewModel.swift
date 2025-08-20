@@ -14,9 +14,11 @@ class DetailsViewModel {
     var isFavorite: Bool = false
     var errorMessage: String?
     
+    let favoriteService: FavoriteService
     let productService: ProductServiceProtocol
     
-    init(productService: ProductServiceProtocol = ProductService()) {
+    init(favoriteService: FavoriteService, productService: ProductServiceProtocol = ProductService()) {
+        self.favoriteService = favoriteService
         self.productService = productService
     }
     
@@ -35,12 +37,12 @@ class DetailsViewModel {
     
     func favoriteToggle() {
            guard let product = product else { return }
-           FavoriteService.favoriteToggle(id: product.id)
+           favoriteService.favoriteToggle(id: product.id)
            checkIfIsFavorite()
        }
        
        private func checkIfIsFavorite() {
            guard let product = product else { return }
-           self.isFavorite = FavoriteService.favoriteIds.contains(product.id)
+           self.isFavorite = favoriteService.getFavorites().contains(product.id)
        }
 }

@@ -10,7 +10,7 @@ import SwiftUI
 struct DetailsView: View {
     @Environment(\.dismiss) var dismiss
     
-    @State var viewModel: DetailsViewModel = DetailsViewModel(productService: ProductService())
+    @State var viewModel: DetailsViewModel = DetailsViewModel(favoriteService: FavoriteService(), productService: ProductService())
     
     var id: Int
     

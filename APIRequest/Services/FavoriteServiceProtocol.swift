@@ -7,8 +7,7 @@
 
 import Foundation
 
-protocol FavoriteServiceProtocol {
-    static var favoriteIds: [Int] { get }
-    
-    static func favoriteToggle(id: Int)
+protocol FavoriteServiceProtocol {    
+    func favoriteToggle(id: Int)
+    func getFavorites() -> [Int]
 }
