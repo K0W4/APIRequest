@@ -27,7 +27,10 @@ struct Details: View {
                                 .padding()
                         )
                     
-                    FavoriteIcon(product: $product)
+                    // TODO: Ajustar isFavorite
+//                    FavoriteIcon(product: $product) {
+//                        product.isFavorite.toggle()
+//                    }
                         .padding()
                 }
                 
@@ -76,7 +79,7 @@ struct Details: View {
 
 #Preview {
     NavigationStack {
-        var product: Product = Product(id: 1, title: "Product name with two or more lines goes here", description: "Descrição", category: "Category", price: 0.0, thumbnail: "Thumbnail")
+        let product: Product = Product(id: 1, title: "Product name with two or more lines goes here", description: "Descrição", category: "Category", price: 0.0, thumbnail: "Thumbnail")
         
         Details(product: .constant(product))
     }

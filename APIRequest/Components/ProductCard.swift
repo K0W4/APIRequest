@@ -11,16 +11,21 @@ struct ProductCard: View {
     @Binding var product: Product
     
     var isHorizontal: Bool
+//    var selectedActoin: (() -> Void)
+    var isFavorite: Bool
+    var favoriteAction: (() -> Void)
     
     var body: some View {
-        
         if isHorizontal {
             HStack(alignment: .top, spacing: 16) {
-                
-                Image("Placeholder")
-                    .resizable()
-                    .frame(width: 160, height: 160)
-                    .cornerRadius(8)
+                AsyncImage(url: URL(string: product.thumbnail)) { image in
+                    image.resizable()
+                } placeholder: {
+                    Image(.placeholder)
+                        .resizable()
+                }
+                .frame(width: 160, height: 160)
+                .cornerRadius(8)
                 
                 VStack(alignment: .leading, spacing: 24) {
                     
@@ -31,7 +36,7 @@ struct ProductCard: View {
                         
                         Spacer()
    
-                        FavoriteIcon(product: $product)
+                        FavoriteIcon(isFavorite: isFavorite, action: favoriteAction)
                     }
                     
                     VStack (alignment: .leading, spacing: 4) {
@@ -57,13 +62,17 @@ struct ProductCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 
                 ZStack(alignment: .topTrailing) {
+                    AsyncImage(url: URL(string: product.thumbnail)) { image in
+                        image.resizable()
+                    } placeholder: {
+                        Image(.placeholder)
+                            .resizable()
+                    }
+                    .frame(width: 160, height: 160)
+                    .cornerRadius(8)
                     
-                    Image("Placeholder")
-                        .resizable()
-                        .frame(width: 160, height: 160)
-                        .cornerRadius(8)
+                    FavoriteIcon(isFavorite: isFavorite, action: favoriteAction)
                     
-                    FavoriteIcon(product: $product)
                 }
                 
                 VStack(alignment: .leading) {
@@ -91,8 +100,8 @@ struct ProductCard: View {
     }
 }
 
-#Preview {
-    var product: Product = Product(id: 1, title: "Product name with two or more lines goes here", description: "Descrição", category: "Category", price: 0.0, thumbnail: "Thumbnail")
-    
-    ProductCard(product: .constant(product), isHorizontal: false)
-}
+//#Preview {
+//    var product: Product = Product(id: 1, title: "Product name with two or more lines goes here", description: "Descrição", category: "Category", price: 0.0, thumbnail: "Thumbnail")
+//    
+//    ProductCard(product: .constant(product), isHorizontal: false)
+//}

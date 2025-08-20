@@ -7,14 +7,6 @@
 
 import Foundation
 
-class ProductResponse: Decodable {
-    var results: [Product]
-}
-
-class ProductCategoryResponse: Decodable {
-    var results: [Product]
-}
-
 class Product: Decodable {
     var id: Int
     var title: String
@@ -41,4 +33,12 @@ class Product: Decodable {
         self.price = price
         self.thumbnail = thumbnail
     }
+}
+
+class ProductsResponse: Decodable {
+    var products: [Product]
+}
+
+class ProductCategoryResponse: Decodable {
+    var products: [Product]
 }

@@ -8,9 +8,7 @@
 import Foundation
 
 class ProductService: ProductServiceProtocol {
-    
     private let baseURL = "https://dummyjson.com"
-    
     
     func fetchProduct(id: Int) async throws -> Product {
         let urlString = "\(baseURL)/products/\(id)"
@@ -37,15 +35,10 @@ class ProductService: ProductServiceProtocol {
             throw URLError(.badURL)
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let productResponse = try JSONDecoder().decode(ProductsResponse.self, from: data)
         
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw URLError(.badServerResponse)
-        }
-        
-        let productResponse = try JSONDecoder().decode(ProductResponse.self, from: data)
-        
-        return productResponse.results
+        return productResponse.products
     }
     
     func fechProductsByCategory(category: String) async throws -> [Product] {
@@ -63,6 +56,6 @@ class ProductService: ProductServiceProtocol {
         
         let productCategoryResponse = try JSONDecoder().decode(ProductCategoryResponse.self, from: data)
         
-        return productCategoryResponse.results
+        return productCategoryResponse.products
     }
 }

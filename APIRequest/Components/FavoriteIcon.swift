@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct FavoriteIcon: View {
-    
-    @Binding var product: Product
+    var isFavorite: Bool
+    var action: (() -> Void)
     
     var body: some View {
-        
-        Image(systemName: product.isFavorite ? "heart.fill" : "heart")
+        Image(systemName: isFavorite ? "heart.fill" : "heart")
             .typography(.title3Regular)
             .padding(8)
             .background(
@@ -22,13 +21,11 @@ struct FavoriteIcon: View {
                     .foregroundStyle(.graysGray5)
             )
             .onTapGesture {                
-                product.isFavorite.toggle()
+                action()
             }
     }
 }
 
 #Preview {
-    var product: Product = Product(id: 1, title: "Product name with two or more lines goes here", description: "Descrição", category: "Category", price: 0.0, thumbnail: "Thumbnail")
-    
-    FavoriteIcon(product: .constant(product))
+    FavoriteIcon(isFavorite: true, action: { })
 }

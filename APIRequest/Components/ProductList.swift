@@ -162,6 +162,6 @@ enum TypeProductList {
 }
 
 #Preview {
-    var count: Int = 1
+    let count: Int = 1
     ProductList(type: .cart, quantity: .constant(count))
 }

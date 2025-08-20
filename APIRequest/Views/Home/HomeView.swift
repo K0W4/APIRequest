@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    var viewModel: HomeViewModel
+    @State var viewModel: HomeViewModel = HomeViewModel(service: ProductService())
     
     private let columns = [
         GridItem(.flexible(), spacing: 0),
@@ -16,39 +16,56 @@ struct HomeView: View {
     ]
     
     var body: some View {
-        ScrollView{
+        ScrollView {
             VStack(spacing: 16) {
-                if let deals = viewModel.deals {
+                if viewModel.isLoading {
+                    ProgressView()
+                } else if let errorMessage = viewModel.errorMessage {
+                    Text(errorMessage)
+                        .foregroundStyle(.red)
+                } else {
+                    if let _ = viewModel.deals {
+                        VStack(spacing: 8) {
+                            Text("Deals of the day")
+                                .typography(.title2Emphasized)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                            ProductCard (
+                                product: Binding(
+                                    get: { viewModel.deals! },
+                                    set: { viewModel.deals = $0 }
+                                ),
+                                isHorizontal: true,
+                                isFavorite: viewModel.favoriteIds.contains(viewModel.deals?.id ?? -1)) { viewModel.favoriteTogle(productId: viewModel.deals?.id ?? 0) }
+                        }
+                    }
+                        
                     VStack(spacing: 8) {
-                        Text("Deals of the day")
+                        Text("Top picks")
                             .typography(.title2Emphasized)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        ProductCard(product: deals, isHorizontal: true)
-                    }
-                }
-                
-                VStack(spacing: 8) {
-                    
-                    Text("Top picks")
-                        .typography(.title2Emphasized)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    LazyVGrid(columns: columns) {
-                        if let topPicks = viewModel.topPicks{
-                            ForEach(topPicks, id: \.id) { product in
-                                ProductCard(product: product, isHorizontal: false)
+                            
+                        LazyVGrid(columns: columns) {
+                            ForEach($viewModel.topPicks, id: \.id) { $product in
+                                ProductCard(product: $product, isHorizontal: false,
+                                            isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteTogle(productId: product.id) }
+                                }
                             }
                         }
                     }
-                }
-
+                
                 Spacer()
             }
             .padding()
             .navigationTitle(Text("Home"))
             .background(.backgroundsPrimary)
             .toolbarBackgroundVisibility(.visible, for: .tabBar)
+            .refreshable {
+                await viewModel.fetchProducts(id: 1)
+            }
+        }
+        .task {
+            await viewModel.fetchProducts(id: 1)
         }
     }
 }
