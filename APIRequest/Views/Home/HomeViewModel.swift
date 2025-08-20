@@ -13,6 +13,7 @@ class HomeViewModel {
     var topPicks: [Product] = []
     var isLoading: Bool = false
     var errorMessage: String?
+    var selectedProductId: Int? = nil
     var favoriteIds: [Int] = []
     
     private let service: ProductServiceProtocol
@@ -34,6 +35,10 @@ class HomeViewModel {
         isLoading = false
     }
     
+    func selectedProductDetails(id: Int) {
+        selectedProductId = id
+    }
+    
     func favoriteTogle(productId: Int) {
         if let index = favoriteIds.firstIndex(where: {$0 == productId}) {
             favoriteIds.remove(at: index)
@@ -44,5 +49,4 @@ class HomeViewModel {
         // favoriteIds = service.getFavirites()
         
     }
-    
 }

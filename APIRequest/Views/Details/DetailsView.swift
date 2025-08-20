@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct Details: View {
+struct DetailsView: View {
     
     @Environment(\.dismiss) var dismiss
-    @Binding var product: Product
+    var id: Int
     
     var body: some View {
         ScrollView{
@@ -36,11 +36,11 @@ struct Details: View {
                 
                 VStack(alignment: .leading, spacing: 4) {
                     
-                    Text(product.title)
+                    Text("Title")
                         .typography(.title3Regular)
                         .padding(.top,8)
                     
-                    let formattedPrice = String(format: "%.2f", product.price)
+                    let formattedPrice = String(format: "%.2f", "Preço")
                     Text("US$ \(formattedPrice)")
                         .typography(.title2Emphasized)
                     
@@ -50,7 +50,7 @@ struct Details: View {
                 
                 
                 
-                Text(product.description)
+                Text("Descrição")
                     .typography(.bodyRegular)
                     .foregroundStyle(.labelsSecondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -74,13 +74,5 @@ struct Details: View {
                 dismiss()
             }
             .padding(.horizontal)
-    }
-}
-
-#Preview {
-    NavigationStack {
-        let product: Product = Product(id: 1, title: "Product name with two or more lines goes here", description: "Descrição", category: "Category", price: 0.0, thumbnail: "Thumbnail")
-        
-        Details(product: .constant(product))
     }
 }

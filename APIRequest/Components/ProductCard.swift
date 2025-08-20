@@ -11,7 +11,7 @@ struct ProductCard: View {
     @Binding var product: Product
     
     var isHorizontal: Bool
-//    var selectedActoin: (() -> Void)
+    var selectedActoin: (() -> Void)
     var isFavorite: Bool
     var favoriteAction: (() -> Void)
     
@@ -55,6 +55,9 @@ struct ProductCard: View {
                 RoundedRectangle(cornerRadius: 16)
                     .foregroundStyle(Color(.backgroundsSecondary))
             )
+            .onTapGesture {
+                selectedActoin()
+            }
         }
         
         else {
@@ -95,13 +98,9 @@ struct ProductCard: View {
                     .foregroundStyle(Color(.backgroundsSecondary))
             )
             .frame(width: 177)
-          
+            .onTapGesture {
+                selectedActoin()
+            }
         }
     }
 }
-
-//#Preview {
-//    var product: Product = Product(id: 1, title: "Product name with two or more lines goes here", description: "Descrição", category: "Category", price: 0.0, thumbnail: "Thumbnail")
-//    
-//    ProductCard(product: .constant(product), isHorizontal: false)
-//}

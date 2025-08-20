@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State var viewModel: HomeViewModel = HomeViewModel(service: ProductService())
+    @State var showDetails: Bool = false
     
     private let columns = [
         GridItem(.flexible(), spacing: 0),
@@ -16,60 +17,71 @@ struct HomeView: View {
     ]
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                if viewModel.isLoading {
-                    ProgressView()
-                } else if let errorMessage = viewModel.errorMessage {
-                    Text(errorMessage)
-                        .foregroundStyle(.red)
-                } else {
-                    if let _ = viewModel.deals {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 16) {
+                    if viewModel.isLoading {
+                        ProgressView()
+                    } else if let errorMessage = viewModel.errorMessage {
+                        Text(errorMessage)
+                            .foregroundStyle(.red)
+                    } else {
+                        if let _ = viewModel.deals {
+                            VStack(spacing: 8) {
+                                Text("Deals of the day")
+                                    .typography(.title2Emphasized)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                ProductCard (
+                                    product: Binding(
+                                        get: { viewModel.deals! },
+                                        set: { viewModel.deals = $0 }
+                                    ),
+                                    isHorizontal: true,
+                                    selectedActoin: { viewModel.selectedProductDetails(id: viewModel.deals?.id ?? 0)
+                                    showDetails = true
+                                    },
+                                    isFavorite: viewModel.favoriteIds.contains(viewModel.deals?.id ?? -1)) { viewModel.favoriteTogle(productId: viewModel.deals?.id ?? 0) }
+                            }
+                        }
+                            
                         VStack(spacing: 8) {
-                            Text("Deals of the day")
+                            Text("Top picks")
                                 .typography(.title2Emphasized)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 
-                            ProductCard (
-                                product: Binding(
-                                    get: { viewModel.deals! },
-                                    set: { viewModel.deals = $0 }
-                                ),
-                                isHorizontal: true,
-                                isFavorite: viewModel.favoriteIds.contains(viewModel.deals?.id ?? -1)) { viewModel.favoriteTogle(productId: viewModel.deals?.id ?? 0) }
-                        }
-                    }
-                        
-                    VStack(spacing: 8) {
-                        Text("Top picks")
-                            .typography(.title2Emphasized)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                        LazyVGrid(columns: columns) {
-                            ForEach($viewModel.topPicks, id: \.id) { $product in
-                                ProductCard(product: $product, isHorizontal: false,
-                                            isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteTogle(productId: product.id) }
+                            LazyVGrid(columns: columns) {
+                                ForEach($viewModel.topPicks, id: \.id) { $product in
+                                    ProductCard(product: $product, isHorizontal: false,
+                                        selectedActoin: { viewModel.selectedProductDetails(id: product.id)
+                                        showDetails = true
+                                        },
+                                        isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteTogle(productId: product.id) }
+                                    }
                                 }
                             }
                         }
-                    }
-                
-                Spacer()
+                    
+                    Spacer()
+                }
+                .padding()
+                .navigationTitle(Text("Home"))
+                .background(.backgroundsPrimary)
+                .toolbarBackgroundVisibility(.visible, for: .tabBar)
+                .refreshable {
+                    await viewModel.fetchProducts(id: 1)
+                }
             }
-            .padding()
-            .navigationTitle(Text("Home"))
-            .background(.backgroundsPrimary)
-            .toolbarBackgroundVisibility(.visible, for: .tabBar)
-            .refreshable {
+            .task {
                 await viewModel.fetchProducts(id: 1)
             }
         }
-        .task {
-            await viewModel.fetchProducts(id: 1)
+        .sheet(isPresented: $showDetails, onDismiss: {
+            viewModel.selectedProductId = nil
+        }) {
+            if let id = viewModel.selectedProductId {
+                DetailsView(id: id)
+            }
         }
     }
-}
-
-#Preview {
-    TabBar()
 }
