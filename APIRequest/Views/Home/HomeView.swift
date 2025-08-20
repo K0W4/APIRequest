@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State var viewModel: HomeViewModel = HomeViewModel(service: ProductService())
+    @State var viewModel: HomeViewModel = HomeViewModel(favoriteService: FavoriteService(), productService: ProductService())
     @State var showDetails: Bool = false
     
     private let columns = [
@@ -41,7 +41,7 @@ struct HomeView: View {
                                     selectedActoin: { viewModel.selectedProductDetails(id: viewModel.deals?.id ?? 0)
                                     showDetails = true
                                     },
-                                    isFavorite: viewModel.favoriteIds.contains(viewModel.deals?.id ?? -1)) { viewModel.favoriteTogle(productId: viewModel.deals?.id ?? 0) }
+                                    isFavorite: viewModel.favoriteIds.contains(viewModel.deals?.id ?? -1)) { viewModel.favoriteTogle(id: viewModel.deals?.id ?? 0) }
                             }
                         }
                             
@@ -56,7 +56,7 @@ struct HomeView: View {
                                         selectedActoin: { viewModel.selectedProductDetails(id: product.id)
                                         showDetails = true
                                         },
-                                        isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteTogle(productId: product.id) }
+                                        isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteTogle(id: product.id) }
                                     }
                                 }
                             }

@@ -1,5 +1,5 @@
 //
-//  Details.swift
+//  DetailsView.swift
 //  APIRequest
 //
 //  Created by Gabriel Barbosa on 15/08/25.
