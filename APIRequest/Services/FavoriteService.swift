@@ -8,9 +8,9 @@
 import Foundation
 
 class FavoriteService: FavoriteServiceProtocol {
-    var favoriteIds: [Int] = []
+    static var favoriteIds: [Int] = []
     
-    func favoriteToggle(id: Int) {
+    static func favoriteToggle(id: Int) {
         if let index = favoriteIds.firstIndex(where: {$0 == id}) {
             favoriteIds.remove(at: index)
         } else {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State var viewModel: HomeViewModel = HomeViewModel(favoriteService: FavoriteService(), productService: ProductService())
+    @State var viewModel: HomeViewModel = HomeViewModel(productService: ProductService())
     @State var showDetails: Bool = false
     
     private let columns = [
@@ -25,6 +25,7 @@ struct HomeView: View {
                     } else if let errorMessage = viewModel.errorMessage {
                         Text(errorMessage)
                             .foregroundStyle(.red)
+                            .padding()
                     } else {
                         if let _ = viewModel.deals {
                             VStack(spacing: 8) {
@@ -77,6 +78,7 @@ struct HomeView: View {
             }
         }
         .sheet(isPresented: $showDetails, onDismiss: {
+            viewModel.refreshFavorites()
             viewModel.selectedProductId = nil
         }) {
             if let id = viewModel.selectedProductId {

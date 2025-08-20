@@ -16,13 +16,11 @@ class HomeViewModel {
     var selectedProductId: Int? = nil
     var favoriteIds: [Int] = []
     
-    let favoriteService: FavoriteServiceProtocol
     let productService: ProductServiceProtocol
 
-    init(favoriteService: FavoriteServiceProtocol, productService: ProductServiceProtocol) {
-        self.favoriteService = favoriteService
+    init(productService: ProductServiceProtocol) {
         self.productService = productService
-        self.favoriteIds = favoriteService.favoriteIds
+        self.favoriteIds = FavoriteService.favoriteIds
     }
     
     func fetchProducts(id: Int) async {
@@ -43,7 +41,11 @@ class HomeViewModel {
     }
     
     func favoriteTogle(id: Int) {
-        favoriteService.favoriteToggle(id: id)
-        self.favoriteIds = favoriteService.favoriteIds
+        FavoriteService.favoriteToggle(id: id)
+        self.favoriteIds = FavoriteService.favoriteIds
+    }
+    
+    func refreshFavorites() {
+        self.favoriteIds = FavoriteService.favoriteIds
     }
 }
