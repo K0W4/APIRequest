@@ -16,13 +16,12 @@ class HomeViewModel {
     var selectedProductId: Int? = nil
     var favoriteIds: [Int] = []
     
-    let favoriteService: FavoriteService
+    let favoriteService: FavoriteServiceProtocol
     let productService: ProductServiceProtocol
 
-    init(favoriteService: FavoriteService, productService: ProductServiceProtocol) {
+    init(favoriteService: FavoriteServiceProtocol, productService: ProductServiceProtocol) {
         self.favoriteService = favoriteService
         self.productService = productService
-        self.favoriteIds = favoriteService.getFavorites()
     }
     
     func fetchProducts(id: Int) async {
@@ -38,16 +37,25 @@ class HomeViewModel {
         isLoading = false
     }
     
-    func selectedProductDetails(id: Int) {
-        selectedProductId = id
-    }
-    
     func favoriteTogle(id: Int) {
-        favoriteService.favoriteToggle(id: id)
-        self.favoriteIds = favoriteService.getFavorites()
+        do {
+            try favoriteService.favoriteToggle(id: id)
+            try self.favoriteIds = favoriteService.getFavorites()
+        } catch {
+            errorMessage = "Error to favorite Product: \(error.localizedDescription)"
+        }
     }
     
     func refreshFavorites() {
-        self.favoriteIds = favoriteService.getFavorites()
+        do {
+            try self.favoriteIds = favoriteService.getFavorites()
+        }
+        catch {
+            errorMessage = "Error to refresh favorites Product: \(error.localizedDescription)"
+        }
+    }
+    
+    func selectedProductDetails(id: Int) {
+        selectedProductId = id
     }
 }

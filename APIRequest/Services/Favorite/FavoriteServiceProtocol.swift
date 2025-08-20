@@ -8,6 +8,6 @@
 import Foundation
 
 protocol FavoriteServiceProtocol {    
-    func favoriteToggle(id: Int)
-    func getFavorites() -> [Int]
+    func favoriteToggle(id: Int) throws
+    func getFavorites() throws -> [Int]
 }

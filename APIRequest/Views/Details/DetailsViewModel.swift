@@ -15,9 +15,9 @@ class DetailsViewModel {
     var errorMessage: String?
     
     let favoriteService: FavoriteService
-    let productService: ProductServiceProtocol
+    let productService: ProductService
     
-    init(favoriteService: FavoriteService, productService: ProductServiceProtocol = ProductService()) {
+    init(favoriteService: FavoriteService, productService: ProductService) {
         self.favoriteService = favoriteService
         self.productService = productService
     }
