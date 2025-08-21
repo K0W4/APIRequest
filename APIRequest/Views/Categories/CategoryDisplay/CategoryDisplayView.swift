@@ -14,23 +14,25 @@ struct CategoryDisplayView: View {
     
     var body: some View {
         VStack() {
-            
-            ScrollView(.horizontal) {
                 
-                HStack(alignment: .top, spacing: 8){
+            HStack(alignment: .top, spacing: 8){
+                
+                ForEach(viewModel.categories.prefix(4), id: \.id) { category in
                     
-                    ForEach(viewModel.categories, id: \.id) { category in
+                    NavigationLink {
+                        CategoryProductsView(category: category)
+                    } label : {
                         CategoryIcon(category: category)
-                    }    
+                    }
+                       
                 }
-                .padding()
             }
+            .padding()
             
-      
             VStack() {
                 List(viewModel.categories, id: \.id) { category in
                     NavigationLink {
-                        
+                        CategoryProductsView(category: category)
                     } label: {
                         Text(category.name)
                     }

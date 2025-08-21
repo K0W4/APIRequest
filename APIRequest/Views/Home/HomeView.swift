@@ -72,6 +72,7 @@ struct HomeView: View {
             }
             .task {
                 await viewModel.fetchProducts(id: 1)
+                viewModel.refreshFavorites()
             }
         }
         .sheet(isPresented: $showDetails, onDismiss: {

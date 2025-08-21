@@ -31,8 +31,8 @@ struct CategoryIcon: View {
         .frame(width: 84)
     }
 }
-
-#Preview {
-    let sampleCategory = ProductCategory(name: "Furniture") 
-    CategoryIcon(category: sampleCategory)
-}
+//
+//#Preview {
+//    let sampleCategory = ProductCategory(name: "Furniture") 
+//    CategoryIcon(category: sampleCategory)
+//}
