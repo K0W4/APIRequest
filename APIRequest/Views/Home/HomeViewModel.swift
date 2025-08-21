@@ -37,7 +37,7 @@ class HomeViewModel {
         isLoading = false
     }
     
-    func favoriteTogle(id: Int) {
+    func favoriteToggle(id: Int) {
         do {
             try favoriteService.favoriteToggle(id: id)
             try self.favoriteIds = favoriteService.getFavorites()

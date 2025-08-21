@@ -6,12 +6,11 @@
 //
 
 @testable import APIRequest
-
 import Testing
 
 struct HomeViewModelTests {
     @Test
-    func fetchProducts() async throws {
+    func fetchProducts_Success() async throws {
         // Given
         let favoriteService = MockFavoriteService()
         let productService = MockProductService()
@@ -27,7 +26,7 @@ struct HomeViewModelTests {
     }
     
     @Test
-    func fetchProductsShouldFail() async throws {
+    func fetchProducts_Failure() async throws {
         // Given
         let favoriteService = MockFavoriteService()
         let productService = MockProductService(shouldFail: true)
@@ -43,53 +42,93 @@ struct HomeViewModelTests {
     }
     
     @Test
-    func favorites() throws {
+    func favoriteToggle_Success() throws {
         // Given
         let favoriteService = MockFavoriteService()
         let productService = MockProductService()
         let viewModel = HomeViewModel(favoriteService: favoriteService, productService: productService)
-        
-        // When
-        viewModel.favoriteTogle(id: 1)
-        viewModel.favoriteTogle(id: 2)
-        viewModel.favoriteTogle(id: 1)
-        viewModel.refreshFavorites()
+                
+        // When: 1º favorit
+        viewModel.favoriteToggle(id: 1)
         
         // Then
         #expect(viewModel.favoriteIds.count == 1)
-        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.favoriteIds.contains(1))
+        
+        // When: 2º favorit
+        viewModel.favoriteToggle(id: 2)
+        
+        // Then
+        #expect(viewModel.favoriteIds.count == 2)
+        
+        // When: Remove the first
+        viewModel.favoriteToggle(id: 1)
+        
+        // Then
+        #expect(viewModel.favoriteIds.count == 1)
+        #expect(viewModel.favoriteIds.contains(2))
     }
     
     @Test
-    func favoritesFail() throws {
+    func favoriteToggle_Failure() throws {
         // Given
         let favoriteService = MockFavoriteService(shouldFail: true)
         let productService = MockProductService()
         let viewModel = HomeViewModel(favoriteService: favoriteService, productService: productService)
         
         // When
-        viewModel.favoriteTogle(id: 1)
-        viewModel.favoriteTogle(id: 2)
-        viewModel.favoriteTogle(id: 1)
+        viewModel.favoriteToggle(id: 1)
+        
+        // Then
+        #expect(viewModel.favoriteIds.isEmpty)
+        #expect(viewModel.errorMessage != nil)
+    }
+
+    @Test
+    func refreshFavorites_Success() throws {
+        // Given
+        let favoriteService = MockFavoriteService()
+        let productService = MockProductService()
+        let viewModel = HomeViewModel(favoriteService: favoriteService, productService: productService)
+                
+        // When
+        try favoriteService.favoriteToggle(id: 1)
+        
         viewModel.refreshFavorites()
         
         // Then
-        #expect(viewModel.favoriteIds.count != 1)
+        #expect(viewModel.favoriteIds.count == 1)
+        #expect(viewModel.favoriteIds.contains(1))
+        #expect(viewModel.errorMessage == nil)
+    }
+    
+    @Test
+    func refreshFavorites_Failure() throws {
+        // Given
+        let favoriteService = MockFavoriteService(shouldFail: true)
+        let productService = MockProductService()
+        let viewModel = HomeViewModel(favoriteService: favoriteService, productService: productService)
+                
+        // When
+        viewModel.refreshFavorites()
+        
+        // Then
+        #expect(viewModel.favoriteIds.isEmpty)
         #expect(viewModel.errorMessage != nil)
     }
     
     @Test
-    func testSelectedProductDetails_updatesProductId() throws {
-        // Given (Dado)
+    func selectedProductDetails() throws {
+        // Given
         let productService = MockProductService()
         let favoriteService = MockFavoriteService()
         let viewModel = HomeViewModel(favoriteService: favoriteService, productService: productService)
-        
-        // When (Quando)
+                
+        // When
         let testId = 99
         viewModel.selectedProductDetails(id: testId)
         
-        // Then (Então)
+        // Then
         #expect(viewModel.selectedProductId == testId)
     }
 }
