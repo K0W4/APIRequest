@@ -73,10 +73,4 @@ class CategoryProductsViewModel {
             }
         }
     }
-       
-//   private func checkIfIsFavorite() {
-//       guard let product = product else { return }
-//       self.isFavorite = favoriteService.getFavorites().contains(product.id)
-//   }
-
 }

@@ -10,6 +10,7 @@ import Foundation
 @Observable
 class FavoritesViewModel {
     var favorites: [Product] = []
+    var filteredProducts: [Product] = []
     var isLoading: Bool = false
     var errorMessage: String?
     var selectedProductId: Int? = nil
@@ -28,11 +29,23 @@ class FavoritesViewModel {
     
         do {
             favoriteIds = try favoriteService.getFavorites()
+            self.filteredProducts = self.favorites
             
-            for id in favoriteIds {
-                let product = try await productService.fetchProduct(id: id)
-                favorites.append(product)
+            var fetchedProducts: [Product] = []
+            
+            try await withThrowingTaskGroup(of: Product.self) { group in
+                for id in favoriteIds {
+                    group.addTask {
+                        return try await self.productService.fetchProduct(id: id)
+                    }
+                }
+                for try await product in group {
+                    fetchedProducts.append(product)
+                }
             }
+            
+            self.favorites = fetchedProducts.sorted { $0.id < $1.id }
+            self.filteredProducts = self.favorites
         } catch {
             errorMessage = "Failed to load favorites: \(error.localizedDescription)"
         }
@@ -51,5 +64,15 @@ class FavoritesViewModel {
     
     func selectedProductDetails(id: Int) {
         selectedProductId = id
+    }
+    
+    func filterProducts(text: String) {
+        if text.isEmpty {
+            filteredProducts = favorites
+        } else {
+            filteredProducts = favorites.filter { product in
+                product.title.localizedCaseInsensitiveContains(text)
+            }
+        }
     }
 }

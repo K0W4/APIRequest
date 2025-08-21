@@ -29,7 +29,7 @@ struct CategoryProductsView: View {
                         ForEach($viewModel.filteredProducts, id: \.id) { $product in
                             ProductCard(product: $product,
                                         isHorizontal: false,
-                                        selectedActoin: { viewModel.selectedProductDetails(id: product.id)
+                                        selectedAction: { viewModel.selectedProductDetails(id: product.id)
                                 showDetails = true },
                                         isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteTogle(id: product.id) }
                         }

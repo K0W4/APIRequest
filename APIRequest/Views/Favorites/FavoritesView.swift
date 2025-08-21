@@ -11,57 +11,70 @@ struct FavoritesView: View {
     @State var viewModel: FavoritesViewModel = FavoritesViewModel(favoriteService: FavoriteService(), productService: ProductService())
     @State var searchText: String = ""
     @State var showDetails: Bool = false
-    
-    var isEmpty: Bool = false
-    
+        
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 16) {
-                    if viewModel.isLoading {
-                        ProgressView()
-                    } else if let errorMessage = viewModel.errorMessage {
-                        Text(errorMessage)
-                            .foregroundStyle(.red)
-                            .padding()
-                    } else if viewModel.favorites.isEmpty {
+            VStack {
+                if viewModel.filteredProducts.isEmpty && !viewModel.isLoading {
+                    if searchText.isEmpty {
                         FavoritesEmptyView()
                     } else {
-                        ForEach($viewModel.favorites, id: \.id) { $product in
-                            ProductList(
-                                type: .favorite,
-                                product: Binding<Product?>(
-                                    get: { $product.wrappedValue },
-                                    set: {
-                                        if let newValue = $0 {
-                                            $product.wrappedValue = newValue
+                        ContentUnavailableView.search(text: searchText)
+                    }
+                } else if viewModel.isLoading {
+                    ProgressView()
+                } else if let errorMessage = viewModel.errorMessage {
+                    Text(errorMessage)
+                        .foregroundStyle(.red)
+                        .padding()
+                } else {
+                    ScrollView {
+                        VStack(spacing: 16) {
+                            ForEach($viewModel.filteredProducts, id: \.id) { $product in
+                                ProductList(
+                                    type: .favorite,
+                                    product: Binding<Product?>(
+                                        get: { $product.wrappedValue },
+                                        set: {
+                                            if let newValue = $0 {
+                                                $product.wrappedValue = newValue
+                                            }
                                         }
-                                    }
-                                ),
-                                purchase: .constant(nil),
-                                selectedAction: { viewModel.selectedProductId = product.id
-                                    showDetails = true
-                                },
-                            )
+                                    ),
+                                    purchase: .constant(nil),
+                                    selectedAction: {
+                                        viewModel.selectedProductId = product.id
+                                        showDetails = true
+                                    },
+                                    cartAction: {}
+                                )
+                            }
                         }
+                        .padding(.horizontal)
                     }
                 }
-                .padding(.horizontal)
-                .navigationTitle(Text("Favorites"))
-                .background(.backgroundsPrimary)
-                .toolbarBackgroundVisibility(.visible, for: .tabBar)
-                .searchable(text: $searchText)
+            }
+            .navigationTitle(Text("Favorites"))
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+            .background(.backgroundsPrimary)
+            .toolbarBackgroundVisibility(.visible, for: .tabBar)
+            .onChange(of: searchText) { oldValue, newValue in
+                viewModel.filterProducts(text: newValue)
             }
             .task {
+                viewModel.refreshFavorites()
                 await viewModel.fetchFavoriteProducts()
             }
-        }
-        .sheet(isPresented: $showDetails, onDismiss: {
-            viewModel.refreshFavorites()
-            viewModel.selectedProductId = nil
-        }) {
-            if let id = viewModel.selectedProductId {
-                DetailsView(id: id)
+            .sheet(isPresented: $showDetails, onDismiss: {
+                Task {
+                    viewModel.refreshFavorites()
+                    await viewModel.fetchFavoriteProducts()
+                }
+                viewModel.selectedProductId = nil
+            }) {
+                if let id = viewModel.selectedProductId {
+                    DetailsView(id: id)
+                }
             }
         }
     }
