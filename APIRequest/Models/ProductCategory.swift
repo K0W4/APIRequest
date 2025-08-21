@@ -9,15 +9,18 @@ import Foundation
 
 class ProductCategory: Decodable, Identifiable {
     var name: String
+    var slug: String
     
     var id: String { name }
     
     enum CodingKeys: CodingKey {
         case name
+        case slug
     }
     
-    init(name: String) {
+    init(name: String, slug: String) {
         self.name = name
+        self.slug = slug
     }
     
     var symbolName: String {
