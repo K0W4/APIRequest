@@ -39,7 +39,7 @@ struct HomeView: View {
                                         set: { viewModel.deals = $0 }
                                     ),
                                     isHorizontal: true,
-                                    selectedActoin: { viewModel.selectedProductDetails(id: viewModel.deals?.id ?? 0)
+                                    selectedAction: { viewModel.selectedProductDetails(id: viewModel.deals?.id ?? 0)
                                     showDetails = true
                                     },
                                     isFavorite: viewModel.favoriteIds.contains(viewModel.deals?.id ?? -1)) { viewModel.favoriteToggle(id: viewModel.deals?.id ?? 0) }
@@ -54,7 +54,7 @@ struct HomeView: View {
                             LazyVGrid(columns: columns) {
                                 ForEach($viewModel.topPicks, id: \.id) { $product in
                                     ProductCard(product: $product, isHorizontal: false,
-                                        selectedActoin: { viewModel.selectedProductDetails(id: product.id)
+                                        selectedAction: { viewModel.selectedProductDetails(id: product.id)
                                         showDetails = true
                                         },
                                         isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteToggle(id: product.id) }

@@ -11,7 +11,7 @@ struct ProductCard: View {
     @Binding var product: Product
     
     var isHorizontal: Bool
-    var selectedActoin: (() -> Void)
+    var selectedAction: (() -> Void)
     var isFavorite: Bool
     var favoriteAction: (() -> Void)
     
@@ -56,7 +56,7 @@ struct ProductCard: View {
                     .foregroundStyle(Color(.backgroundsSecondary))
             )
             .onTapGesture {
-                selectedActoin()
+                selectedAction()
             }
         }
         
@@ -99,7 +99,7 @@ struct ProductCard: View {
             )
             .frame(width: 177)
             .onTapGesture {
-                selectedActoin()
+                selectedAction()
             }
         }
     }

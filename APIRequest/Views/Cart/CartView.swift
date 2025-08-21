@@ -30,14 +30,14 @@ struct CartView: View {
                 VStack(spacing: 16) {
                     ScrollView {
                         VStack(spacing: 16) {
-                            ForEach($cart, id: \.id) { $purchase in
-                                ProductList(
-                                    type: .cart,
-                                    productName: purchase.product.title,
-                                    productPrice: purchase.product.price,
-                                    quantity: $purchase.quantity
-                                )
-                            }
+//                            ForEach($cart, id: \.id) { $purchase in
+//                                ProductList(
+//                                    type: .cart,
+//                                    productName: purchase.product.title,
+//                                    productPrice: purchase.product.price,
+//                                    quantity: $purchase.quantity
+//                                )
+//                            }
                         }
                     }
                     

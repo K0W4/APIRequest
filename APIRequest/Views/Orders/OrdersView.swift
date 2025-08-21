@@ -33,14 +33,14 @@ struct OrdersView: View {
                     VStack(spacing: 16) {
                         ScrollView {
                             VStack(spacing: 16) {
-                                ForEach($orders, id: \.id) { $purchase in
-                                    ProductList(
-                                        type: .delivery,
-                                        productName: purchase.product.title,
-                                        productPrice: purchase.product.price,
-                                        quantity: $purchase.quantity
-                                    )
-                                }
+//                                ForEach($orders, id: \.id) { $purchase in
+//                                    ProductList(
+//                                        type: .delivery,
+//                                        productName: purchase.product.title,
+//                                        productPrice: purchase.product.price,
+//                                        quantity: $purchase.quantity
+//                                    )
+//                                }
                             }
                         }
                     }

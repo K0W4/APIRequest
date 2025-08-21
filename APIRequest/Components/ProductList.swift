@@ -9,10 +9,12 @@ import SwiftUI
 
 struct ProductList: View {
     var type: TypeProductList
-    var productName: String = "Product name with two or more lines goes here"
-    var productPrice: Double = 0.0
-    @Binding var quantity: Int
     
+    @Binding var product: Product?
+    @Binding var purchase: Purchase?
+    
+    var selectedAction: (() -> Void)
+    var cartAction: (() -> Void)?
     var date: Date = Date()
     var formattedDate: String {
         let formatter = DateFormatter()
@@ -25,19 +27,23 @@ struct ProductList: View {
         switch type {
         case .cart:
             HStack(spacing: 8) {
-                Image(.placeholder)
-                    .resizable()
-                    .frame(width: 78, height: 78)
-                    .cornerRadius(8)
+                AsyncImage(url: URL(string: purchase!.product.thumbnail)) { image in
+                    image.resizable()
+                } placeholder: {
+                    Image(.placeholder)
+                        .resizable()
+                }
+                .frame(width: 94, height: 94)
+                .cornerRadius(8)
                 
                 HStack(spacing: 16) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(productName)
+                        Text(purchase!.product.title)
                             .typography(.footnoteRegular)
                             .lineLimit(2)
                             .frame(height: 36, alignment: .top)
                                                 
-                        let formattedPrice = String(format: "%.2f", productPrice)
+                        let formattedPrice = String(format: "%.2f", purchase!.product.price)
                         Text("US$ \(formattedPrice)")
                             .typography(.headline)
                     }
@@ -45,7 +51,7 @@ struct ProductList: View {
                     Spacer()
                     
                     HStack(spacing: 4) {
-                        Button(action: { if quantity  > 0 { quantity -= 1 } }) {
+                        Button(action: { if purchase!.quantity  > 0 { purchase!.quantity -= 1 } }) {
                             Image(systemName: "minus")
                                 .frame(width: 23, height: 23)
                                 .typography(.caption1Regular)
@@ -56,12 +62,12 @@ struct ProductList: View {
                                 )
                         }
                         
-                        Text("\(quantity)")
+                        Text("\(purchase!.quantity)")
                             .frame(width: 16)
                             .typography(.bodyRegular)
                             .foregroundColor(.labelsPrimary)
                         
-                        Button(action: { if quantity  < 9 { quantity += 1 } }) {
+                        Button(action: { if purchase!.quantity  < 9 { purchase!.quantity += 1 } }) {
                             Image(systemName: "plus")
                                 .frame(width: 23, height: 23)
                                 .typography(.caption1Regular)
@@ -81,21 +87,28 @@ struct ProductList: View {
                 RoundedRectangle(cornerRadius: 16)
                     .foregroundStyle(Color(.backgroundsSecondary))
             )
+            .onTapGesture {
+                selectedAction()
+            }
             
         case .favorite:
             HStack(spacing: 8) {
-                Image(.placeholder)
-                    .resizable()
-                    .frame(width: 78, height: 78)
-                    .cornerRadius(8)
+                AsyncImage(url: URL(string: product!.thumbnail)) { image in
+                    image.resizable()
+                } placeholder: {
+                    Image(.placeholder)
+                        .resizable()
+                }
+                .frame(width: 94, height: 94)
+                .cornerRadius(8)
                 
                 HStack(spacing: 16) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(productName)
+                        Text(product!.title)
                             .typography(.footnoteRegular)
                             .lineLimit(2)
                                                 
-                        let formattedPrice = String(format: "%.2f", productPrice)
+                        let formattedPrice = String(format: "%.2f", product!.price)
                         Text("US$ \(formattedPrice)")
                             .typography(.headline)
                     }
@@ -103,7 +116,7 @@ struct ProductList: View {
                     Spacer()
                     
                     Button {
-                        
+                        cartAction!()
                     } label: {
                         Image(systemName: "cart.fill")
                             .foregroundStyle(.labelsPrimary)
@@ -123,13 +136,20 @@ struct ProductList: View {
                 RoundedRectangle(cornerRadius: 16)
                     .foregroundStyle(Color(.backgroundsSecondary))
             )
+            .onTapGesture {
+                selectedAction()
+            }
             
         case .delivery:
             HStack(spacing: 8) {
-                Image(.placeholder)
-                    .resizable()
-                    .frame(width: 78, height: 78)
-                    .cornerRadius(8)
+                AsyncImage(url: URL(string: product!.thumbnail)) { image in
+                    image.resizable()
+                } placeholder: {
+                    Image(.placeholder)
+                        .resizable()
+                }
+                .frame(width: 94, height: 94)
+                .cornerRadius(8)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Delivery by \(formattedDate)")
@@ -137,11 +157,11 @@ struct ProductList: View {
                         .foregroundStyle(.labelsSecondary)
                         .textCase(.uppercase)
                     
-                    Text(productName)
+                    Text(product!.title)
                         .typography(.footnoteRegular)
                         .lineLimit(1)
                                                 
-                    let formattedPrice = String(format: "%.2f", productPrice)
+                    let formattedPrice = String(format: "%.2f", product!.price)
                     Text("US$ \(formattedPrice)")
                         .typography(.headline)
                 }
@@ -153,15 +173,13 @@ struct ProductList: View {
                 RoundedRectangle(cornerRadius: 16)
                     .foregroundStyle(Color(.backgroundsSecondary))
             )
+            .onTapGesture {
+                selectedAction()
+            }
         }
     }
 }
 
 enum TypeProductList {
     case cart, favorite, delivery
-}
-
-#Preview {
-    let count: Int = 1
-    ProductList(type: .cart, quantity: .constant(count))
 }

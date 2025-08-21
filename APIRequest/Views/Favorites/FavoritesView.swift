@@ -8,56 +8,61 @@
 import SwiftUI
 
 struct FavoritesView: View {
-    @State private var searchText: String = ""
-    @State private var isRecording: Bool = false
+    @State var viewModel: FavoritesViewModel = FavoritesViewModel(favoriteService: FavoriteService(), productService: ProductService())
+    @State var searchText: String = ""
+    @State var showDetails: Bool = false
     
     var isEmpty: Bool = false
     
-    @State var favorites: [Purchase] = [
-        Purchase(product: Product(
-            id: 1,
-            title: "Essence Mascara Lash Princess",
-            description: "Mascara popular com efeito de volume e alongamento. Fórmula de longa duração e cruelty-free.",
-            category: "beauty",
-            price: 9.99,
-            thumbnail: ""
-        ))
-    ]
-    
     var body: some View {
-        VStack {
-            VStack {
-                if isEmpty {
-                    FavoritesEmptyView()
-                } else {
-                    VStack(spacing: 16) {
-                        ScrollView {
-                            VStack(spacing: 16) {
-                                ForEach($favorites, id: \.id) { $purchase in
-                                    ProductList(
-                                        type: .favorite,
-                                        productName: purchase.product.title,
-                                        productPrice: purchase.product.price,
-                                        quantity: $purchase.quantity
-                                    )
-                                }
-                            }
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 16) {
+                    if viewModel.isLoading {
+                        ProgressView()
+                    } else if let errorMessage = viewModel.errorMessage {
+                        Text(errorMessage)
+                            .foregroundStyle(.red)
+                            .padding()
+                    } else if viewModel.favorites.isEmpty {
+                        FavoritesEmptyView()
+                    } else {
+                        ForEach($viewModel.favorites, id: \.id) { $product in
+                            ProductList(
+                                type: .favorite,
+                                product: Binding<Product?>(
+                                    get: { $product.wrappedValue },
+                                    set: {
+                                        if let newValue = $0 {
+                                            $product.wrappedValue = newValue
+                                        }
+                                    }
+                                ),
+                                purchase: .constant(nil),
+                                selectedAction: { viewModel.selectedProductId = product.id
+                                    showDetails = true
+                                },
+                            )
                         }
                     }
                 }
+                .padding(.horizontal)
+                .navigationTitle(Text("Favorites"))
+                .background(.backgroundsPrimary)
+                .toolbarBackgroundVisibility(.visible, for: .tabBar)
+                .searchable(text: $searchText)
+            }
+            .task {
+                await viewModel.fetchFavoriteProducts()
             }
         }
-        .padding(.horizontal)
-        .navigationTitle(Text("Favorites"))
-        .background(.backgroundsPrimary)
-        .toolbarBackgroundVisibility(.visible, for: .tabBar)
-        .searchable(text: $searchText)
-        .onChange(of: searchText) { oldValue, newValue in
-            // Faz o filtro
+        .sheet(isPresented: $showDetails, onDismiss: {
+            viewModel.refreshFavorites()
+            viewModel.selectedProductId = nil
+        }) {
+            if let id = viewModel.selectedProductId {
+                DetailsView(id: id)
+            }
         }
     }
-}
-
-#Preview {
-    FavoritesView()
 }
