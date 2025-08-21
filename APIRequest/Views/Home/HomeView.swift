@@ -42,7 +42,7 @@ struct HomeView: View {
                                     selectedActoin: { viewModel.selectedProductDetails(id: viewModel.deals?.id ?? 0)
                                     showDetails = true
                                     },
-                                    isFavorite: viewModel.favoriteIds.contains(viewModel.deals?.id ?? -1)) { viewModel.favoriteTogle(id: viewModel.deals?.id ?? 0) }
+                                    isFavorite: viewModel.favoriteIds.contains(viewModel.deals?.id ?? -1)) { viewModel.favoriteToggle(id: viewModel.deals?.id ?? 0) }
                             }
                         }
                             
@@ -57,7 +57,7 @@ struct HomeView: View {
                                         selectedActoin: { viewModel.selectedProductDetails(id: product.id)
                                         showDetails = true
                                         },
-                                        isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteTogle(id: product.id) }
+                                        isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteToggle(id: product.id) }
                                     }
                                 }
                             }

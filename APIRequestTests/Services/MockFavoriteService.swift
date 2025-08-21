@@ -11,15 +11,10 @@ import Foundation
 
 class MockFavoriteService: FavoriteServiceProtocol {
     var shouldFail: Bool
-    var productTrue: Product
-    var productFalse: Product
-    var favoriteIds: [Int]
+    var favoriteIds: [Int] = []
     
     init(shouldFail: Bool = false) {
         self.shouldFail = shouldFail
-        self.productTrue = Product(id: 1, title: "title", description: "description", category: "category", price: 0.0, thumbnail: "thumbnail")
-        self.productFalse = Product(id: 2, title: "title", description: "description", category: "category", price: 0.0, thumbnail: "thumbnail")
-        self.favoriteIds = [productTrue.id]
     }
     
     func favoriteToggle(id: Int) throws {
@@ -37,8 +32,7 @@ class MockFavoriteService: FavoriteServiceProtocol {
     func getFavorites() throws -> [Int] {
         if shouldFail {
             throw NSError(domain: #function, code: 2)
-        } else {
-            return [0]
         }
+        return favoriteIds
     }
 }

@@ -14,10 +14,10 @@ class DetailsViewModel {
     var isFavorite: Bool = false
     var errorMessage: String?
     
-    let favoriteService: FavoriteService
-    let productService: ProductService
+    let favoriteService: FavoriteServiceProtocol
+    let productService: ProductServiceProtocol
     
-    init(favoriteService: FavoriteService, productService: ProductService) {
+    init(favoriteService: FavoriteServiceProtocol, productService: ProductServiceProtocol) {
         self.favoriteService = favoriteService
         self.productService = productService
     }
@@ -27,7 +27,7 @@ class DetailsViewModel {
         
         do {
             product = try await productService.fetchProduct(id: id)
-            checkIfIsFavorite()
+            checkIsFavorite()
         } catch {
             errorMessage = "Error to fetch Product: \(error.localizedDescription)"
         }
@@ -36,13 +36,24 @@ class DetailsViewModel {
     }
     
     func favoriteToggle() {
-           guard let product = product else { return }
-           favoriteService.favoriteToggle(id: product.id)
-           checkIfIsFavorite()
-       }
+        guard let product = product else { return }
+        
+        do {
+            try favoriteService.favoriteToggle(id: product.id)
+                checkIsFavorite()
+        } catch {
+            errorMessage = "Could not update favorite status: \(error.localizedDescription)"
+        }
+    }
        
-       private func checkIfIsFavorite() {
-           guard let product = product else { return }
-           self.isFavorite = favoriteService.getFavorites().contains(product.id)
-       }
+    func checkIsFavorite() {
+        guard let product = product else { return }
+        
+        do {
+            self.isFavorite = try favoriteService.getFavorites().contains(product.id)
+        } catch {
+            self.isFavorite = false
+            errorMessage = "Could not check favorite status: \(error.localizedDescription)"
+        }
+    }
 }
