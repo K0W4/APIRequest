@@ -37,7 +37,7 @@ class ProductCategory: Decodable, Identifiable {
                 return "lamp.table.fill"
             case "Kitchen Accessories":
                 return "fork.knife"
-            case "Laptop":
+            case "Laptops":
                 return "laptopcomputer"
             case "Mens Shirts":
                 return "tshirt.fill"

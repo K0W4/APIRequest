@@ -9,9 +9,13 @@ import Foundation
 import SwiftUI
 
 class Purchase: ObservableObject, Identifiable, Hashable {
-    let id: UUID
-    let product: Product
+    var id: UUID
+    var product: Product
     var quantity: Int
+    
+    var subtotal: Double {
+        return product.price * Double(quantity)
+    }
     
     init(product: Product) {
         self.id = UUID()

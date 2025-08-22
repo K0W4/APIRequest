@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DetailsView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(CartViewModel.self) var cart: CartViewModel
     
     @State var viewModel: DetailsViewModel = DetailsViewModel(favoriteService: FavoriteService(), productService: ProductService())
     
@@ -79,6 +80,9 @@ struct DetailsView: View {
                                 .fill(Color(.fillsTertiary))
                         )
                         .onTapGesture {
+                            if let product = viewModel.product {
+                                cart.addProduct(product: product)
+                            }
                             dismiss()
                         }
                         .padding(.horizontal)

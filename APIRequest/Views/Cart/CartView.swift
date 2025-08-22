@@ -8,21 +8,18 @@
 import SwiftUI
 
 struct CartView: View {
-    var isEmpty: Bool = false
-    var total: Double = 0
+
+    @Environment(CartViewModel.self) private var cart
     
-    @State var cart: [Purchase] = [
-        Purchase(product: Product(
-            id: 1,
-            title: "Essence Mascara Lash Princess",
-            description: "Mascara popular com efeito de volume e alongamento. Fórmula de longa duração e cruelty-free.",
-            category: "beauty",
-            price: 9.99,
-            thumbnail: ""
-        ))
-    ]
+    @State private var showDetails = false
+    @State private var selectedProductId: Int? = nil
+    @State private var isEmpty: Bool = false
+
     
     var body: some View {
+        
+        @Bindable var cart = cart
+        
         VStack {
             if isEmpty {
                 CartEmptyView()
@@ -30,14 +27,25 @@ struct CartView: View {
                 VStack(spacing: 16) {
                     ScrollView {
                         VStack(spacing: 16) {
-//                            ForEach($cart, id: \.id) { $purchase in
-//                                ProductList(
-//                                    type: .cart,
-//                                    productName: purchase.product.title,
-//                                    productPrice: purchase.product.price,
-//                                    quantity: $purchase.quantity
-//                                )
-//                            }
+                            
+                            
+                            ForEach($cart.products) { $purchase in
+                                ProductList(
+                                    type: .cart,
+                                    product: $purchase.product, // Product (valor)
+                                    purchase: $purchase,                      // Binding<Purchase>
+                                    selectedAction: {
+                                        selectedProductId = $purchase.wrappedValue.product.id
+                                        showDetails = true
+                                    }
+                                )
+                            }
+
+                            
+                            
+                            
+                            
+
                         }
                     }
                     
@@ -49,7 +57,7 @@ struct CartView: View {
                             
                             Spacer()
                             
-                            Text("R$: \(total, specifier: "%.2f")")
+                            Text("R$: \(cart.totalPrice, specifier: "%.2f")")
                                 .typography(.headline)
                                 .foregroundStyle(.labelsPrimary)
                         }

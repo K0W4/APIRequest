@@ -7,7 +7,16 @@
 
 import Foundation
 
-class Product: Decodable {
+class Product: Decodable, Hashable {
+    
+    static func == (lhs: Product, rhs: Product) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
     var id: Int
     var title: String
     var description: String

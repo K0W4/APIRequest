@@ -10,9 +10,13 @@ import SwiftData
 
 @main
 struct APIRequestApp: App {
+    
+    @State private var cart = CartViewModel()
+    
     var body: some Scene {
         WindowGroup {
             TabBar()
+                .environment(cart)
         }
     }
 }
