@@ -13,7 +13,7 @@ struct DetailsView: View {
     
     let id: Int
     
-    @State var viewModel: DetailsViewModel = DetailsViewModel(favoriteService: FavoriteService(), productService: ProductService(), id: 0)
+    @State var viewModel: DetailsViewModel = DetailsViewModel(favoriteService: FavoriteService(), productService: ProductService())
     
     
     var body: some View {
@@ -95,7 +95,7 @@ struct DetailsView: View {
             .toolbarBackground(Color.backgroundsSecondary, for: .navigationBar)
             .toolbarBackgroundVisibility(.visible, for: .navigationBar)
             .task {
-                await viewModel.fetchProduct(id: viewModel.id)
+                await viewModel.fetchProduct(id: id)
             }
         }
     }
