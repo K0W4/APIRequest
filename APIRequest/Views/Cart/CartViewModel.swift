@@ -13,6 +13,7 @@ class CartViewModel {
     var products: [Purchase] = []
     var totalPrice: Double = 0
     var selectedProductId: Int?
+    var showDetails: Bool = false
     
     func addProduct(product: Product) {
         

@@ -22,6 +22,8 @@ struct ProductList: View {
         formatter.locale = Locale(identifier: "en_US")
         return formatter.string(from: date)
     }
+    var addAction: (() -> Void)?
+    var removeAction: (() -> Void)?
     
     var body: some View {
         switch type {
@@ -33,6 +35,7 @@ struct ProductList: View {
                     Image(.placeholder)
                         .resizable()
                 }
+                .id(purchase!.product.thumbnail)
                 .frame(width: 94, height: 94)
                 .cornerRadius(8)
                 
@@ -51,15 +54,20 @@ struct ProductList: View {
                     Spacer()
                     
                     HStack(spacing: 4) {
-                        Button(action: { if purchase!.quantity  > 0 { purchase!.quantity -= 1 } }) {
-                            Image(systemName: "minus")
-                                .frame(width: 23, height: 23)
-                                .typography(.caption1Regular)
-                                .foregroundColor(.labelsPrimary)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .foregroundStyle(Color(.fillsQuaternary))
-                                )
+                        
+                        if let action = removeAction {
+                            Button(action: action) {
+                                Image(systemName: "minus")
+                                    .frame(width: 23, height: 23)
+                                    .typography(.caption1Regular)
+                                    .foregroundColor(.labelsPrimary)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .foregroundStyle(Color(.fillsQuaternary))
+                                    )
+                            }
+                            
+                            
                         }
                         
                         Text("\(purchase!.quantity)")
@@ -67,15 +75,17 @@ struct ProductList: View {
                             .typography(.bodyRegular)
                             .foregroundColor(.labelsPrimary)
                         
-                        Button(action: { if purchase!.quantity  < 9 { purchase!.quantity += 1 } }) {
-                            Image(systemName: "plus")
-                                .frame(width: 23, height: 23)
-                                .typography(.caption1Regular)
-                                .foregroundColor(.labelsPrimary)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .foregroundStyle(Color(.fillsTertiary))
-                                )
+                        if let action = addAction {
+                            Button(action: action) {
+                                Image(systemName: "plus")
+                                    .frame(width: 23, height: 23)
+                                    .typography(.caption1Regular)
+                                    .foregroundColor(.labelsPrimary)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .foregroundStyle(Color(.fillsTertiary))
+                                    )
+                            }
                         }
                     }
                 }
