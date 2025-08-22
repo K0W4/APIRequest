@@ -12,15 +12,15 @@ class CategoryDisplayViewModel {
     var categories: [ProductCategory] = []
     var isLoading: Bool = false
     var errorMessage: String?
+    var searchText: String = ""
     
-    private let service: CategoryDisplayService
+    let service: CategoryServiceProtocol
 
-    init(service: CategoryDisplayService) {
+    init(service: CategoryServiceProtocol) {
         self.service = service
     }
     
     func fetchCategories() async {
-        
         isLoading = true
         
         do {
@@ -30,11 +30,5 @@ class CategoryDisplayViewModel {
         }
         
         isLoading = false
-
     }
-    
-    
-    
-   
-    
 }

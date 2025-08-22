@@ -11,13 +11,6 @@ struct CategoryProductsView: View {
     @Environment(\.dismiss) var dismiss
     
     @State var viewModel: CategoryProductsViewModel = CategoryProductsViewModel(favoriteService: FavoriteService(), productService: ProductService())
-    @State var showDetails: Bool = false
-    @State var searchText: String = ""
-    
-    private let columns = [
-        GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible(), spacing: 16)
-    ]
     
     var category: ProductCategory
     
@@ -25,13 +18,13 @@ struct CategoryProductsView: View {
         VStack {
             ScrollView {
                 VStack(spacing: 16) {
-                    LazyVGrid(columns: columns) {
+                    LazyVGrid(columns: viewModel.columns) {
                         ForEach($viewModel.filteredProducts, id: \.id) { $product in
                             ProductCard(product: $product,
                                         isHorizontal: false,
                                         selectedAction: { viewModel.selectedProductDetails(id: product.id)
-                                showDetails = true },
-                                        isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteTogle(id: product.id) }
+                                viewModel.showDetails = true },
+                                        isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteToggle(id: product.id) }
                         }
                     }
                 }
@@ -45,14 +38,14 @@ struct CategoryProductsView: View {
                 .navigationBarTitleDisplayMode(.inline)
             }
         }
-        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
-        .onChange(of: searchText) { _, newValue in
+        .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always))
+        .onChange(of: viewModel.searchText) { _, newValue in
             viewModel.filterProducts(text: newValue)
         }
         .onDisappear {
             dismiss()
         }
-        .sheet(isPresented: $showDetails, onDismiss: {
+        .sheet(isPresented: $viewModel.showDetails, onDismiss: {
             viewModel.refreshFavorites()
             viewModel.selectedProductId = nil
         }) {

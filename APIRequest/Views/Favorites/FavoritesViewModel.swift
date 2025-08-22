@@ -15,6 +15,8 @@ class FavoritesViewModel {
     var errorMessage: String?
     var selectedProductId: Int? = nil
     var favoriteIds: [Int] = []
+    var searchText: String = ""
+    var showDetails: Bool = false
     
     let favoriteService: FavoriteServiceProtocol
     let productService: ProductServiceProtocol

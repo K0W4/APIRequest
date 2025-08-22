@@ -13,13 +13,15 @@ class DetailsViewModel {
     var isLoading: Bool = false
     var isFavorite: Bool = false
     var errorMessage: String?
+    var id: Int
     
     let favoriteService: FavoriteServiceProtocol
     let productService: ProductServiceProtocol
     
-    init(favoriteService: FavoriteServiceProtocol, productService: ProductServiceProtocol) {
+    init(favoriteService: FavoriteServiceProtocol, productService: ProductServiceProtocol, id: Int) {
         self.favoriteService = favoriteService
         self.productService = productService
+        self.id = id
     }
     
     func fetchProduct(id: Int) async {
