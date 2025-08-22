@@ -11,9 +11,9 @@ struct DetailsView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(CartViewModel.self) var cart: CartViewModel
     
-    let id: Int
+    let product: Product
     
-    @State var viewModel: DetailsViewModel = DetailsViewModel(favoriteService: FavoriteService(), productService: ProductService())
+    @State var viewModel: DetailsViewModel = DetailsViewModel(favoriteService: FavoriteService())
     
     
     var body: some View {
@@ -25,7 +25,7 @@ struct DetailsView: View {
                     Text(errorMessage)
                         .foregroundStyle(.red)
                         .padding()
-                } else if let product = viewModel.product {
+                } else {
                     ScrollView {
                         VStack(spacing: 16) {
                             ZStack(alignment: .topTrailing){
@@ -45,7 +45,7 @@ struct DetailsView: View {
                                 )
                                 
                                 FavoriteIcon(isFavorite: viewModel.isFavorite) {
-                                    viewModel.favoriteToggle()
+                                    viewModel.favoriteToggle(product: product)
                                 }
                                 .padding()
                             }
@@ -81,9 +81,7 @@ struct DetailsView: View {
                                 .fill(Color(.fillsTertiary))
                         )
                         .onTapGesture {
-                            if let product = viewModel.product {
-                                cart.addProduct(product: product)
-                            }
+                            cart.addProduct(product: product)
                             dismiss()
                         }
                         .padding(.horizontal)
@@ -94,8 +92,8 @@ struct DetailsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(Color.backgroundsSecondary, for: .navigationBar)
             .toolbarBackgroundVisibility(.visible, for: .navigationBar)
-            .task {
-                await viewModel.fetchProduct(id: id)
+            .onAppear {
+                viewModel.checkIsFavorite(product: product)
             }
         }
     }

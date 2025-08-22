@@ -87,7 +87,3 @@ struct CartView: View {
         .toolbarBackgroundVisibility(.visible, for: .tabBar)
     }
 }
-
-#Preview {
-    CartView()
-}

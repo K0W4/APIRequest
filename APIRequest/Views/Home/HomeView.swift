@@ -21,7 +21,7 @@ struct HomeView: View {
                             .foregroundStyle(.red)
                             .padding()
                     } else {
-                        if let _ = viewModel.deals {
+                        if let product = viewModel.deals {
                             VStack(spacing: 8) {
                                 Text("Deals of the day")
                                     .typography(.title2Emphasized)
@@ -33,7 +33,7 @@ struct HomeView: View {
                                         set: { viewModel.deals = $0 }
                                     ),
                                     isHorizontal: true,
-                                    selectedAction: { viewModel.selectedProductDetails(id: viewModel.deals?.id ?? 0)
+                                    selectedAction: { viewModel.selectedProductDetails(product: product)
                                         viewModel.showDetails = true
                                     },
                                     isFavorite: viewModel.favoriteIds.contains(viewModel.deals?.id ?? -1)) { viewModel.favoriteToggle(id: viewModel.deals?.id ?? 0) }
@@ -48,7 +48,7 @@ struct HomeView: View {
                             LazyVGrid(columns: viewModel.columns) {
                                 ForEach($viewModel.topPicks, id: \.id) { $product in
                                     ProductCard(product: $product, isHorizontal: false,
-                                        selectedAction: { viewModel.selectedProductDetails(id: product.id)
+                                        selectedAction: { viewModel.selectedProductDetails(product: product)
                                             viewModel.showDetails = true
                                         },
                                         isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteToggle(id: product.id) }
@@ -71,10 +71,10 @@ struct HomeView: View {
         }
         .sheet(isPresented: $viewModel.showDetails, onDismiss: {
             viewModel.refreshFavorites()
-            viewModel.selectedProductId = nil
+            viewModel.selectedProduct = nil
         }) {
-            if let id = viewModel.selectedProductId {
-                DetailsView(id: id)
+            if let product = viewModel.selectedProduct {
+                DetailsView(product: product)
             }
         }
     }

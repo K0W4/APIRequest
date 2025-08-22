@@ -126,12 +126,12 @@ struct CategoryProductsViewModelTests {
         let viewModel = CategoryProductsViewModel(favoriteService: favoriteService, productService: productService)
                 
         // When
-        let testId = 1
+        let product: Product = Product(id: 1, title: "title", description: "description", category: "category", price: 0.0, thumbnail: "thumbnail")
         
-        viewModel.selectedProductDetails(id: testId)
+        viewModel.selectedProductDetails(product: product)
         
         // Then
-        #expect(viewModel.selectedProductId == testId)
+        #expect(viewModel.selectedProduct == product)
     }
 
     @Test

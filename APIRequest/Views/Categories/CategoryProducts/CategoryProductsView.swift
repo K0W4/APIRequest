@@ -22,7 +22,7 @@ struct CategoryProductsView: View {
                         ForEach($viewModel.filteredProducts, id: \.id) { $product in
                             ProductCard(product: $product,
                                         isHorizontal: false,
-                                        selectedAction: { viewModel.selectedProductDetails(id: product.id)
+                                        selectedAction: { viewModel.selectedProductDetails(product: product)
                                 viewModel.showDetails = true },
                                         isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteToggle(id: product.id) }
                         }
@@ -47,10 +47,10 @@ struct CategoryProductsView: View {
         }
         .sheet(isPresented: $viewModel.showDetails, onDismiss: {
             viewModel.refreshFavorites()
-            viewModel.selectedProductId = nil
+            viewModel.selectedProduct = nil
         }) {
-            if let id = viewModel.selectedProductId {
-                DetailsView(id: id)
+            if let product = viewModel.selectedProduct {
+                DetailsView(product: product)
             }
         }
     }

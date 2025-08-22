@@ -41,7 +41,7 @@ struct FavoritesView: View {
                                     ),
                                     purchase: .constant(nil),
                                     selectedAction: {
-                                        viewModel.selectedProductId = product.id
+                                        viewModel.selectedProduct = product
                                         viewModel.showDetails = true
                                     },
                                     cartAction: {}
@@ -68,10 +68,10 @@ struct FavoritesView: View {
                     viewModel.refreshFavorites()
                     await viewModel.fetchFavoriteProducts()
                 }
-                viewModel.selectedProductId = nil
+                viewModel.selectedProduct = nil
             }) {
-                if let id = viewModel.selectedProductId {
-                    DetailsView(id: id)
+                if let product = viewModel.selectedProduct {
+                    DetailsView(product: product)
                 }
             }
         }

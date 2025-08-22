@@ -12,7 +12,7 @@ import SwiftUI
 class CategoryProductsViewModel {
     var category: ProductCategory?
     var categoryProducts: [Product] = []
-    var selectedProductId: Int? = nil
+    var selectedProduct: Product? = nil
     var favoriteIds: [Int] = []
     var isLoading: Bool = false
     var errorMessage: String?
@@ -66,8 +66,8 @@ class CategoryProductsViewModel {
         }
     }
     
-    func selectedProductDetails(id: Int) {
-        selectedProductId = id
+    func selectedProductDetails(product: Product) {
+        selectedProduct = product
     }
     
     func filterProducts(text: String) {

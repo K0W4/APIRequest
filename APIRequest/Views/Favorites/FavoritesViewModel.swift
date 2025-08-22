@@ -13,7 +13,7 @@ class FavoritesViewModel {
     var filteredProducts: [Product] = []
     var isLoading: Bool = false
     var errorMessage: String?
-    var selectedProductId: Int? = nil
+    var selectedProduct: Product? = nil
     var favoriteIds: [Int] = []
     var searchText: String = ""
     var showDetails: Bool = false
@@ -64,8 +64,8 @@ class FavoritesViewModel {
         }
     }
     
-    func selectedProductDetails(id: Int) {
-        selectedProductId = id
+    func selectedProductDetails(product: Product) {
+        selectedProduct = product
     }
     
     func filterProducts(text: String) {

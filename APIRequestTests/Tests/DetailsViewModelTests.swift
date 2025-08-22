@@ -11,54 +11,23 @@ import Testing
 
 struct DetailsViewModelTests {
     @Test
-    func fetchProduct_Success() async throws {
-        // Given
-        let productService = MockProductService()
-        let favoriteService = MockFavoriteService()
-        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService, id: 0)
-        
-        // When
-        await viewModel.fetchProduct(id: 1)
-        
-        // Then
-        #expect(viewModel.product != nil)
-        #expect(viewModel.errorMessage == nil)
-    }
-    
-    @Test
-    func fetchProduct_Failure() async throws {
-        // Given
-        let productService = MockProductService(shouldFail: true)
-        let favoriteService = MockFavoriteService()
-        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService, id: 0)
-        
-        // When
-        await viewModel.fetchProduct(id: 1)
-        
-        // Then
-        #expect(viewModel.product == nil)
-        #expect(viewModel.errorMessage != nil)
-    }
-    
-    @Test
     func favoriteToggle_Success() async throws {
         // Given
-        let productService = MockProductService()
         let favoriteService = MockFavoriteService()
-        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService, id: 0)
+        let viewModel = DetailsViewModel(favoriteService: favoriteService)
         
                 
         // When - Favorit
-        await viewModel.fetchProduct(id: 1)
+        let product: Product = Product(id: 1, title: "title", description: "description", category: "category", price: 0.0, thumbnail: "thumbnail")
         
-        viewModel.favoriteToggle()
+        viewModel.favoriteToggle(product: product)
         
         // Then
         #expect(viewModel.isFavorite == true)
         #expect(viewModel.errorMessage == nil)
         
         // When - Unfavorite
-        viewModel.favoriteToggle()
+        viewModel.favoriteToggle(product: product)
         
         // Then
         #expect(viewModel.isFavorite == false)
@@ -68,14 +37,13 @@ struct DetailsViewModelTests {
     @Test
     func favoriteToggle_Failure() async throws {
         // Given
-        let productService = MockProductService()
         let favoriteService = MockFavoriteService(shouldFail: true)
-        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService, id: 0)
+        let viewModel = DetailsViewModel(favoriteService: favoriteService)
         
         // When
-        await viewModel.fetchProduct(id: 1)
+        let product: Product = Product(id: 1, title: "title", description: "description", category: "category", price: 0.0, thumbnail: "thumbnail")
         
-        viewModel.favoriteToggle()
+        viewModel.favoriteToggle(product: product)
         
         // Then
         #expect(viewModel.isFavorite == false)
@@ -85,14 +53,15 @@ struct DetailsViewModelTests {
     @Test
     func checkIsFavorite_Success() async throws {
         // Given
-        let productService = MockProductService()
         let favoriteService = MockFavoriteService()
-        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService, id: 0)
+        let viewModel = DetailsViewModel(favoriteService: favoriteService)
 
         favoriteService.favoriteIds = [1]
         
         // When
-        await viewModel.fetchProduct(id: 1)
+        let product: Product = Product(id: 1, title: "title", description: "description", category: "category", price: 0.0, thumbnail: "thumbnail")
+        
+        viewModel.checkIsFavorite(product: product)
         
         // Then
         #expect(viewModel.isFavorite == true)
@@ -101,15 +70,15 @@ struct DetailsViewModelTests {
     @Test
     func checkIsFavorite_Failure() async throws {
         // Given
-        let productService = MockProductService()
         let favoriteService = MockFavoriteService(shouldFail: true)
-        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService, id: 0)
+        let viewModel = DetailsViewModel(favoriteService: favoriteService)
             
         // When
-        await viewModel.fetchProduct(id: 1)
+        let product: Product = Product(id: 1, title: "title", description: "description", category: "category", price: 0.0, thumbnail: "thumbnail")
+        
+        viewModel.checkIsFavorite(product: product)
         
         // Then
-        #expect(viewModel.product != nil)
         #expect(viewModel.isFavorite == false)
         #expect(viewModel.errorMessage != nil)
     }

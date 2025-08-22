@@ -14,7 +14,7 @@ class HomeViewModel {
     var topPicks: [Product] = []
     var isLoading: Bool = false
     var errorMessage: String?
-    var selectedProductId: Int? = nil
+    var selectedProduct: Product? = nil
     var favoriteIds: [Int] = []
     var showDetails: Bool = false
     
@@ -62,7 +62,7 @@ class HomeViewModel {
         }
     }
     
-    func selectedProductDetails(id: Int) {
-        selectedProductId = id
+    func selectedProductDetails(product: Product) {
+        selectedProduct = product
     }
 }

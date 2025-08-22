@@ -9,46 +9,26 @@ import Foundation
 
 @Observable
 class DetailsViewModel {
-    var product: Product?
     var isLoading: Bool = false
     var isFavorite: Bool = false
     var errorMessage: String?
     
     let favoriteService: FavoriteServiceProtocol
-    let productService: ProductServiceProtocol
     
-    init(favoriteService: FavoriteServiceProtocol, productService: ProductServiceProtocol) {
+    init(favoriteService: FavoriteServiceProtocol) {
         self.favoriteService = favoriteService
-        self.productService = productService
     }
     
-    func fetchProduct(id: Int) async {
-        isLoading = true
-        
-        do {
-            product = try await productService.fetchProduct(id: id)
-            checkIsFavorite()
-        } catch {
-            errorMessage = "Error to fetch Product: \(error.localizedDescription)"
-        }
-        
-        isLoading = false
-    }
-    
-    func favoriteToggle() {
-        guard let product = product else { return }
-        
+    func favoriteToggle(product: Product) {
         do {
             try favoriteService.favoriteToggle(id: product.id)
-                checkIsFavorite()
+            checkIsFavorite(product: product)
         } catch {
             errorMessage = "Could not update favorite status: \(error.localizedDescription)"
         }
     }
        
-    func checkIsFavorite() {
-        guard let product = product else { return }
-        
+    func checkIsFavorite(product: Product) {
         do {
             self.isFavorite = try favoriteService.getFavorites().contains(product.id)
         } catch {
