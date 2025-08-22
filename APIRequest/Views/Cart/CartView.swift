@@ -41,7 +41,7 @@ struct CartView: View {
                                             }
                                         ),
                                         selectedAction: {
-                                            cart.selectedProductId = $purchase.wrappedValue.product.id
+                                            cart.selectedProduct = $purchase.wrappedValue.product
                                             cart.showDetails = true
                                         },
                                         addAction: {
@@ -84,7 +84,11 @@ struct CartView: View {
                         }
                         .padding(.bottom)
                     }
+                    .id(cart.viewVersion)
                 }
+            }
+            .onAppear {
+                cart.refreshCart()
             }
             .padding(.horizontal)
             .navigationTitle(Text("Cart"))
@@ -92,10 +96,10 @@ struct CartView: View {
             .toolbarBackgroundVisibility(.visible, for: .tabBar)
         }
         .sheet(isPresented: $cart.showDetails, onDismiss: {
-            cart.selectedProductId = nil
+            cart.selectedProduct = nil
         }) {
-            if let id = cart.selectedProductId {
-                DetailsView(id: id)
+            if let product = cart.selectedProduct {
+                DetailsView(product: product)
             }
         }
 

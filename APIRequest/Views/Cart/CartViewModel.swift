@@ -12,8 +12,9 @@ class CartViewModel {
     
     var products: [Purchase] = []
     var totalPrice: Double = 0
-    var selectedProductId: Int?
+    var selectedProduct: Product? = nil
     var showDetails: Bool = false
+    var viewVersion: Int = 0
     
     func addProduct(product: Product) {
         
@@ -43,7 +44,16 @@ class CartViewModel {
         }
     }
     
-    func selectedProductDetails(id: Int) {
-        selectedProductId = id
+    func selectedProductDetails(product: Product) {
+        selectedProduct = product
     }
+    
+    @MainActor
+        func refreshCart() {
+            // Se quiser normalizar/atualizar dados, faça aqui.
+            // Ex.: products = products.map { var p = $0; return p }
+
+            updateTotalPrice()
+            viewVersion &+= 1  // muda identidade da lista
+        }
 }
