@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 @Observable
 class HomeViewModel {
@@ -15,6 +16,12 @@ class HomeViewModel {
     var errorMessage: String?
     var selectedProductId: Int? = nil
     var favoriteIds: [Int] = []
+    var showDetails: Bool = false
+    
+    let columns = [
+        GridItem(.flexible(), spacing: 0),
+        GridItem(.flexible(), spacing: 0)
+    ]
     
     let favoriteService: FavoriteServiceProtocol
     let productService: ProductServiceProtocol

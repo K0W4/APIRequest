@@ -1,44 +1,44 @@
 //
-//  APIRequestTests.swift
+//  CategoryProductsViewModelTests.swift
 //  APIRequestTests
 //
-//  Created by Gabriel Kowaleski on 18/08/25.
+//  Created by Gabriel Kowaleski on 22/08/25.
 //
 
 @testable import APIRequest
 
 import Testing
 
-struct HomeViewModelTests {
+struct CategoryProductsViewModelTests {
     @Test
-    func fetchProducts_Success() async throws {
+    func fetchProductsByCategorys_Success() async throws {
         // Given
         let favoriteService = MockFavoriteService()
         let productService = MockProductService()
-        let viewModel = HomeViewModel(favoriteService: favoriteService, productService: productService)
+        let viewModel = CategoryProductsViewModel(favoriteService: favoriteService, productService: productService)
         
         // When
-        await viewModel.fetchProducts(id: 1)
+        await viewModel.fetchProductsByCategory(category: ProductCategory(name: "name", slug: "slug"))
         
         // Then
-        #expect(viewModel.deals != nil)
-        #expect(viewModel.topPicks.isEmpty == false)
+        #expect(viewModel.categoryProducts.isEmpty == false)
+        #expect(viewModel.filteredProducts.isEmpty == false)
         #expect(viewModel.errorMessage == nil)
     }
     
     @Test
-    func fetchProducts_Failure() async throws {
+    func fetchProductsByCategory_Failure() async throws {
         // Given
         let favoriteService = MockFavoriteService()
         let productService = MockProductService(shouldFail: true)
-        let viewModel = HomeViewModel(favoriteService: favoriteService, productService: productService)
+        let viewModel = CategoryProductsViewModel(favoriteService: favoriteService, productService: productService)
         
         // When
-        await viewModel.fetchProducts(id: 1)
+        await viewModel.fetchProductsByCategory(category: ProductCategory(name: "name", slug: "slug"))
         
         // Then
-        #expect(viewModel.deals == nil)
-        #expect(viewModel.topPicks.isEmpty)
+        #expect(viewModel.categoryProducts.isEmpty)
+        #expect(viewModel.filteredProducts.isEmpty)
         #expect(viewModel.errorMessage != nil)
     }
     
@@ -47,7 +47,7 @@ struct HomeViewModelTests {
         // Given
         let favoriteService = MockFavoriteService()
         let productService = MockProductService()
-        let viewModel = HomeViewModel(favoriteService: favoriteService, productService: productService)
+        let viewModel = CategoryProductsViewModel(favoriteService: favoriteService, productService: productService)
                 
         // When: 1º favorit
         viewModel.favoriteToggle(id: 1)
@@ -75,7 +75,7 @@ struct HomeViewModelTests {
         // Given
         let favoriteService = MockFavoriteService(shouldFail: true)
         let productService = MockProductService()
-        let viewModel = HomeViewModel(favoriteService: favoriteService, productService: productService)
+        let viewModel = CategoryProductsViewModel(favoriteService: favoriteService, productService: productService)
         
         // When
         viewModel.favoriteToggle(id: 1)
@@ -84,13 +84,13 @@ struct HomeViewModelTests {
         #expect(viewModel.favoriteIds.isEmpty)
         #expect(viewModel.errorMessage != nil)
     }
-
+    
     @Test
     func refreshFavorites_Success() throws {
         // Given
         let favoriteService = MockFavoriteService()
         let productService = MockProductService()
-        let viewModel = HomeViewModel(favoriteService: favoriteService, productService: productService)
+        let viewModel = CategoryProductsViewModel(favoriteService: favoriteService, productService: productService)
                 
         // When
         try favoriteService.favoriteToggle(id: 1)
@@ -108,7 +108,7 @@ struct HomeViewModelTests {
         // Given
         let favoriteService = MockFavoriteService(shouldFail: true)
         let productService = MockProductService()
-        let viewModel = HomeViewModel(favoriteService: favoriteService, productService: productService)
+        let viewModel = CategoryProductsViewModel(favoriteService: favoriteService, productService: productService)
                 
         // When
         viewModel.refreshFavorites()
@@ -123,13 +123,47 @@ struct HomeViewModelTests {
         // Given
         let productService = MockProductService()
         let favoriteService = MockFavoriteService()
-        let viewModel = HomeViewModel(favoriteService: favoriteService, productService: productService)
+        let viewModel = CategoryProductsViewModel(favoriteService: favoriteService, productService: productService)
                 
         // When
-        let testId = 99
+        let testId = 1
+        
         viewModel.selectedProductDetails(id: testId)
         
         // Then
         #expect(viewModel.selectedProductId == testId)
+    }
+
+    @Test
+    func filterProducts() async throws {
+        // Given
+        let favoriteService = MockFavoriteService()
+        let productService = MockProductService()
+        let viewModel = CategoryProductsViewModel(favoriteService: favoriteService, productService: productService)
+
+        try favoriteService.favoriteToggle(id: 1)
+        try favoriteService.favoriteToggle(id: 2)
+
+
+        // When
+        await viewModel.fetchProductsByCategory(category: ProductCategory(name: "name", slug: "slug"))
+        
+        viewModel.filterProducts(text: "title 1")
+        
+        // Then
+        #expect(viewModel.filteredProducts.count == 1)
+        #expect(viewModel.filteredProducts.first?.id == 1)
+
+        // When
+        viewModel.filterProducts(text: "empty")
+
+        // Then
+        #expect(viewModel.filteredProducts.isEmpty)
+        
+        // When
+        viewModel.filterProducts(text: "")
+
+        // Then
+        #expect(viewModel.filteredProducts.count == 2)
     }
 }

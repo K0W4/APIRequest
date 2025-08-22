@@ -6,18 +6,25 @@
 //
 
 import Foundation
+import SwiftUI
 
 @Observable
 class CategoryProductsViewModel {
-    
     var category: ProductCategory?
     var categoryProducts: [Product] = []
     var selectedProductId: Int? = nil
     var favoriteIds: [Int] = []
     var isLoading: Bool = false
     var errorMessage: String?
+    var showDetails: Bool = false
+    var searchText: String = ""
     
     var filteredProducts: [Product] = []
+    
+    let columns = [
+        GridItem(.flexible(), spacing: 16),
+        GridItem(.flexible(), spacing: 16)
+    ]
     
     let favoriteService: FavoriteServiceProtocol
     let productService: ProductServiceProtocol
@@ -41,11 +48,7 @@ class CategoryProductsViewModel {
         isLoading = false
     }
     
-    func selectedProductDetails(id: Int) {
-        selectedProductId = id
-    }
-    
-    func favoriteTogle(id: Int) {
+    func favoriteToggle(id: Int) {
         do {
             try favoriteService.favoriteToggle(id: id)
             try self.favoriteIds = favoriteService.getFavorites()
@@ -63,8 +66,11 @@ class CategoryProductsViewModel {
         }
     }
     
+    func selectedProductDetails(id: Int) {
+        selectedProductId = id
+    }
+    
     func filterProducts(text: String) {
-        
         if text.isEmpty {
             filteredProducts = categoryProducts
         } else {

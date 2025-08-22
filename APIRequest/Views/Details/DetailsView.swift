@@ -11,9 +11,10 @@ struct DetailsView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(CartViewModel.self) var cart: CartViewModel
     
-    @State var viewModel: DetailsViewModel = DetailsViewModel(favoriteService: FavoriteService(), productService: ProductService())
+    let id: Int
     
-    var id: Int
+    @State var viewModel: DetailsViewModel = DetailsViewModel(favoriteService: FavoriteService(), productService: ProductService(), id: 0)
+    
     
     var body: some View {
         NavigationStack {
@@ -94,7 +95,7 @@ struct DetailsView: View {
             .toolbarBackground(Color.backgroundsSecondary, for: .navigationBar)
             .toolbarBackgroundVisibility(.visible, for: .navigationBar)
             .task {
-                await viewModel.fetchProduct(id: id)
+                await viewModel.fetchProduct(id: viewModel.id)
             }
         }
     }

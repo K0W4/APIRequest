@@ -15,7 +15,7 @@ struct DetailsViewModelTests {
         // Given
         let productService = MockProductService()
         let favoriteService = MockFavoriteService()
-        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService)
+        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService, id: 0)
         
         // When
         await viewModel.fetchProduct(id: 1)
@@ -30,7 +30,7 @@ struct DetailsViewModelTests {
         // Given
         let productService = MockProductService(shouldFail: true)
         let favoriteService = MockFavoriteService()
-        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService)
+        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService, id: 0)
         
         // When
         await viewModel.fetchProduct(id: 1)
@@ -45,7 +45,7 @@ struct DetailsViewModelTests {
         // Given
         let productService = MockProductService()
         let favoriteService = MockFavoriteService()
-        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService)
+        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService, id: 0)
         
                 
         // When - Favorit
@@ -70,7 +70,7 @@ struct DetailsViewModelTests {
         // Given
         let productService = MockProductService()
         let favoriteService = MockFavoriteService(shouldFail: true)
-        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService)
+        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService, id: 0)
         
         // When
         await viewModel.fetchProduct(id: 1)
@@ -87,7 +87,7 @@ struct DetailsViewModelTests {
         // Given
         let productService = MockProductService()
         let favoriteService = MockFavoriteService()
-        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService)
+        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService, id: 0)
 
         favoriteService.favoriteIds = [1]
         
@@ -103,7 +103,7 @@ struct DetailsViewModelTests {
         // Given
         let productService = MockProductService()
         let favoriteService = MockFavoriteService(shouldFail: true)
-        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService)
+        let viewModel = DetailsViewModel(favoriteService: favoriteService, productService: productService, id: 0)
             
         // When
         await viewModel.fetchProduct(id: 1)

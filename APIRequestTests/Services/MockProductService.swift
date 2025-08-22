@@ -11,18 +11,16 @@ import Foundation
 
 class MockProductService: ProductServiceProtocol {
     var shouldFail: Bool
-    var product: Product
     
     init(shouldFail: Bool = false) {
         self.shouldFail = shouldFail
-        self.product = Product(id: 1, title: "title", description: "description", category: "category", price: 0.0, thumbnail: "thumbnail")
     }
     
     func fetchProduct(id: Int) async throws -> APIRequest.Product {
         if shouldFail {
             throw NSError(domain: #function, code: 1)
         } else {
-            return product
+            return Product(id: id, title: "title \(id)", description: "description", category: "category", price: 0.0, thumbnail: "thumbnail")
         }
     }
     
@@ -30,15 +28,18 @@ class MockProductService: ProductServiceProtocol {
         if shouldFail {
             throw NSError(domain: #function, code: 2)
         } else {
-            return [product]
+            return [Product(id: 1, title: "title", description: "description", category: "category", price: 0.0, thumbnail: "thumbnail")]
         }
     }
     
-    func fechProductsByCategory(category: String) async throws -> [APIRequest.Product] {
-        if shouldFail {
-            throw NSError(domain: #function, code: 3)
-        } else {
-            return [product]
+    func fetchProductsByCategory(category: String) async throws -> [APIRequest.Product] {
+            if shouldFail {
+                throw NSError(domain: #function, code: 3)
+            } else {
+                return [
+                    Product(id: 1, title: "title 1", description: "description", category: "category", price: 0.0, thumbnail: "thumbnail"),
+                    Product(id: 2, title: "title 2", description: "description", category: "category", price: 0.0, thumbnail: "thumbnail")
+                ]
+            }
         }
-    }
 }

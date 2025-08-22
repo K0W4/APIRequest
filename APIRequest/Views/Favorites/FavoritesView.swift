@@ -9,17 +9,15 @@ import SwiftUI
 
 struct FavoritesView: View {
     @State var viewModel: FavoritesViewModel = FavoritesViewModel(favoriteService: FavoriteService(), productService: ProductService())
-    @State var searchText: String = ""
-    @State var showDetails: Bool = false
         
     var body: some View {
         NavigationStack {
             VStack {
                 if viewModel.filteredProducts.isEmpty && !viewModel.isLoading {
-                    if searchText.isEmpty {
+                    if viewModel.searchText.isEmpty {
                         FavoritesEmptyView()
                     } else {
-                        ContentUnavailableView.search(text: searchText)
+                        ContentUnavailableView.search(text: viewModel.searchText)
                     }
                 } else if viewModel.isLoading {
                     ProgressView()
@@ -44,7 +42,7 @@ struct FavoritesView: View {
                                     purchase: .constant(nil),
                                     selectedAction: {
                                         viewModel.selectedProductId = product.id
-                                        showDetails = true
+                                        viewModel.showDetails = true
                                     },
                                     cartAction: {}
                                 )
@@ -55,17 +53,17 @@ struct FavoritesView: View {
                 }
             }
             .navigationTitle(Text("Favorites"))
-            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+            .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always))
             .background(.backgroundsPrimary)
             .toolbarBackgroundVisibility(.visible, for: .tabBar)
-            .onChange(of: searchText) { oldValue, newValue in
+            .onChange(of: viewModel.searchText) { oldValue, newValue in
                 viewModel.filterProducts(text: newValue)
             }
             .task {
                 viewModel.refreshFavorites()
                 await viewModel.fetchFavoriteProducts()
             }
-            .sheet(isPresented: $showDetails, onDismiss: {
+            .sheet(isPresented: $viewModel.showDetails, onDismiss: {
                 Task {
                     viewModel.refreshFavorites()
                     await viewModel.fetchFavoriteProducts()

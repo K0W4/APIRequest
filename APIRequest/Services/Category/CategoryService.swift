@@ -1,5 +1,5 @@
 //
-//  CategoryDisplayService.swift
+//  CategoryService.swift
 //  APIRequest
 //
 //  Created by Gabriel Barbosa on 20/08/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CategoryDisplayService: CategoryDisplayServiceProtocol {
+class CategoryService: CategoryServiceProtocol {
     private let baseURL = "https://dummyjson.com"
     
     func fetchCategories() async throws -> [ProductCategory] {

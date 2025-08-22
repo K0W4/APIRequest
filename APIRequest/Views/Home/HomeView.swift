@@ -9,12 +9,6 @@ import SwiftUI
 
 struct HomeView: View {
     @State var viewModel: HomeViewModel = HomeViewModel(favoriteService: FavoriteService(), productService: ProductService())
-    @State var showDetails: Bool = false
-    
-    private let columns = [
-        GridItem(.flexible(), spacing: 0),
-        GridItem(.flexible(), spacing: 0)
-    ]
     
     var body: some View {
         NavigationStack {
@@ -40,7 +34,7 @@ struct HomeView: View {
                                     ),
                                     isHorizontal: true,
                                     selectedAction: { viewModel.selectedProductDetails(id: viewModel.deals?.id ?? 0)
-                                    showDetails = true
+                                        viewModel.showDetails = true
                                     },
                                     isFavorite: viewModel.favoriteIds.contains(viewModel.deals?.id ?? -1)) { viewModel.favoriteToggle(id: viewModel.deals?.id ?? 0) }
                             }
@@ -51,11 +45,11 @@ struct HomeView: View {
                                 .typography(.title2Emphasized)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 
-                            LazyVGrid(columns: columns) {
+                            LazyVGrid(columns: viewModel.columns) {
                                 ForEach($viewModel.topPicks, id: \.id) { $product in
                                     ProductCard(product: $product, isHorizontal: false,
                                         selectedAction: { viewModel.selectedProductDetails(id: product.id)
-                                        showDetails = true
+                                            viewModel.showDetails = true
                                         },
                                         isFavorite: viewModel.favoriteIds.contains(product.id)) { viewModel.favoriteToggle(id: product.id) }
                                     }
@@ -75,7 +69,7 @@ struct HomeView: View {
                 viewModel.refreshFavorites()
             }
         }
-        .sheet(isPresented: $showDetails, onDismiss: {
+        .sheet(isPresented: $viewModel.showDetails, onDismiss: {
             viewModel.refreshFavorites()
             viewModel.selectedProductId = nil
         }) {
