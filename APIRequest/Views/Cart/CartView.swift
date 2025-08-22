@@ -32,20 +32,21 @@ struct CartView: View {
                             ForEach($cart.products) { $purchase in
                                 ProductList(
                                     type: .cart,
-                                    product: $purchase.product, // Product (valor)
-                                    purchase: $purchase,                      // Binding<Purchase>
+                                    product: .constant(nil),
+                                    purchase: Binding<Purchase?>(
+                                        get: { $purchase.wrappedValue },
+                                        set: {
+                                            if let newValue = $0 {
+                                                $purchase.wrappedValue = newValue
+                                            }
+                                        }
+                                    ),
                                     selectedAction: {
                                         selectedProductId = $purchase.wrappedValue.product.id
                                         showDetails = true
                                     }
                                 )
                             }
-
-                            
-                            
-                            
-                            
-
                         }
                     }
                     
